@@ -21,8 +21,16 @@ def instructor(request):
                 { "message_content": "Message 2" }
             ],
             "project_bids" : [
-                { "team_name": "Team DU" },
-                { "team_name": "Team Vim" }
+                {
+                    "team_name": "Team DU",
+                    "project_name": "Space Race",
+                    "team_member_names": ["Robby Guthrie", "Devin Johnston"]
+                },
+                {
+                    "team_name": "Team Vim",
+                    "project_name": "Vim Package Manager",
+                    "team_member_names": ["Tim Pope", "Jeremy Dorne"]
+                }
             ]
         }
     return render(request, "instructor.html", context)
@@ -30,12 +38,12 @@ def instructor(request):
 def client(request):
     context = {
             "project_bids" : [
-                { 
+                {
                     "team_name": "Team DU",
                     "project_name": "Space Race",
                     "team_member_names": ["Robby Guthrie", "Devin Johnston"]
                 },
-                { 
+                {
                     "team_name": "Team Vim",
                     "project_name": "Vim Package Manager",
                     "team_member_names": ["Tim Pope", "Jeremy Dorne"]
