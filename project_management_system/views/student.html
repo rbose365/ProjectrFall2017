@@ -1,8 +1,44 @@
 {% extends "base.html" %}
 {% block content %}
 
+<p>Student name</p>
+
 <div class="row">
-    <div class="col s12">Sample column</div>
+    <div class="col s4 pink lighten-2">
+        <h3>Notifications</h3>
+        <ul class="list">
+            {% for notification in notifications %}
+            <li class="card-panel">
+                <span class="title">{{ notification.subject }}</span>
+                <p> {{ notification.body}} </p>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="col s4 blue lighten-2">
+        <h3>Inbox</h3>
+        <ul class="list">
+            {% for message in inbox %}
+            <li class="card-panel">
+                <span class="title">{{ message.subject }}</span>
+                <p> {{ message.body}} </p>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="col s4 pink lighten-2">
+        <h3> Available Projects </h3>
+        <ul class="list">
+            {% for project in projects %}
+            <li class="card-panel">
+                <span class="title">{{ project.project_name }}</span>
+                <p> {{ project.project_description}} </p>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
 </div>
 
 {% endblock content %}
