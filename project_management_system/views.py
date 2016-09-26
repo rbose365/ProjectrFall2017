@@ -11,7 +11,21 @@ def register(request):
     return render(request, "register.html")
 
 def instructor(request):
-    return render(request, "instructor.html")
+    context = {
+            "notifications" : [
+                { "notification_content": "Notification 1" },
+                { "notification_content": "Notification 2" }
+            ],
+            "messages" : [
+                { "message_content": "Message 1" },
+                { "message_content": "Message 2" }
+            ],
+            "project_bids" : [
+                { "team_name": "Team DU" },
+                { "team_name": "Team Vim" }
+            ]
+        }
+    return render(request, "instructor.html", context)
 
 def client(request):
     context = {
