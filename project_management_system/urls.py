@@ -26,4 +26,5 @@ urlpatterns = [
     url(r'^register/', views.register),
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.index),
+    url(r'^student/', views.student),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

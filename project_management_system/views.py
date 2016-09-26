@@ -15,9 +15,12 @@ def instructor(request):
 
 def client(request):
     context = {
-        "project_bids" : [
-            { "team_name": "Team DU" },
-            { "team_name": "Team Vim" }
-        ]
-    }
+            "project_bids" : [
+                { "team_name": "Team DU" },
+                { "team_name": "Team Vim" }
+            ]
+        }
     return render(request, "client.html", context)
+
+def student(request):
+    return render(request, "student.html")
