@@ -10,8 +10,17 @@ def login(request):
 def register(request):
     return render(request, "register.html")
 
+def register(request):
+    return render(request, "instructor.html")
+
 def client(request):
-    return render(request, "client.html")
+    context = {
+            "project_bids" : [
+                { "team_name": "Team DU" },
+                { "team_name": "Team Vim" }
+            ]
+        }
+    return render(request, "client.html", context)
 
 def student(request):
     return render(request, "student.html")
