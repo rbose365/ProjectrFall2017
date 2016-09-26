@@ -1,11 +1,18 @@
 from django.shortcuts import render
+from forms import LoginForm
 
 # Create your views here.
 def index(request):
     return render(request, "index.html")
 
 def login(request):
-    return render(request, "login.html")
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+        form.is_valid()
+        print "Login Sumbitted:", form.cleaned_data
+    else:
+        form = LoginForm()
+    return render(request, "login.html", { "form": form })
 
 def register(request):
     return render(request, "register.html")
