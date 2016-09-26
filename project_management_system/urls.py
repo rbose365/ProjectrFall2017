@@ -20,6 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
+    url(r'^client/', views.client),
     url(r'^login/', views.login),
     url(r'^register/', views.register),
     url(r'^admin/', admin.site.urls),

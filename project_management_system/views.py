@@ -12,3 +12,6 @@ def register(request):
 
 def register(request):
     return render(request, "instructor.html")
+
+def client(request):
+    return render(request, "client.html")
