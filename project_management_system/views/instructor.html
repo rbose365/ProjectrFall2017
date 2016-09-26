@@ -1,28 +1,42 @@
 {% extends "base.html" %}
 {% block content %}
 
-<p>Professor John Smith</p>
+<div>
+    <h5>Professor John Smith</h5>
+</div>
 
 <div class="row">
-    <div class="col l4">
-        <h3>Notifications</h3>
-        <ul>
-            <li>Notification 1</li>
-            <li>Notification 2</li>
+    <div class="card-panel blue lighten-4 col l4">
+        <ul class="collection with-header">
+            <li class="collection-header"><h4>Notifications</h4></li>
+            {% for notification in notifications %}
+            <li class="collection-item avatar">
+                <i class="material-icons circle red">error</i>
+                <span class="title">{{ notification.notification_content }}</span>
+            </li>
+            {% endfor %}
         </ul>
     </div>
-    <div class="col l4">
-        <h3>Inbox</h3>
-        <ul>
-            <li>Message 1</li>
-            <li>Message 2</li>
+    <div class="card-panel blue lighten-4 col l4">
+        <ul class="collection with-header">
+            <li class="collection-header"><h4>Inbox</h4></li>
+            {% for message in messages %}
+            <li class="collection-item avatar">
+                <i class="material-icons circle red">email</i>
+                <span class="title">{{ message.message_content }}</span>
+            </li>
+            {% endfor %}
         </ul>
     </div>
-    <div class="col l4">
-        <h3>Current Bids</h3>
-        <ul>
-            <li>Astronaut Support System</li>
-            <li>Project Management System</li>
+    <div class="card-panel blue lighten-4 col l4">
+        <ul class="collection with-header">
+            <li class="collection-header"><h4>Project Bids</h4></li>
+            {% for project_bid in project_bids %}
+            <li class="collection-item avatar">
+                <i class="material-icons circle red">assignment</i>
+                <span class="title">{{ project_bid.team_name }}</span>
+            </li>
+            {% endfor %}
         </ul>
     </div>
 </div>
