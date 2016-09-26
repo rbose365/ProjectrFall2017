@@ -11,4 +11,10 @@ def register(request):
     return render(request, "register.html")
 
 def client(request):
-    return render(request, "client.html")
+    context = {
+        "project_bids" : [
+            { "team_name": "Team DU" },
+            { "team_name": "Team Vim" }
+        ]
+    }
+    return render(request, "client.html", context)
