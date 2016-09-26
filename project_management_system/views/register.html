@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row">
+    <div class="col s6">
+            <h2>Register:</h2>
+    </div>
+</div>
+
+<div class="row">
+    <form class="col s12" action="" method="put">
+        <div class="row">
+            <div class="input-field col s4">
+                <input type="text" name="email" />
+                <label for="email">Email</label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col s4">
+                <input type="password" name="password" />
+                <label for="password">Password</label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col s4">
+                <p>
+                    <input type="radio" name="user_type" id="student_radio" />
+                    <label for="student_radio">Student</label>
+                </p>
+            
+                <p>
+                    <input type="radio" name="user_type" id="instructor_radio" />
+                    <label for="instructor_radio">Instructor</label>
+                </p>
+
+                <p>
+                    <input type="radio" name="user_type" id="client_radio" />
+                    <label for="client_radio">Client</label>
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col s4">
+                <button class="btn waves-effect waves-light" type="submit">Register</button>
+
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}
