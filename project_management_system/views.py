@@ -60,4 +60,37 @@ def client(request):
     return render(request, "client.html", context)
 
 def student(request):
-    return render(request, "student.html")
+    context = {
+            "projects" : [
+                {
+                    "project_name": "Space Race",
+                    "project_description": "Lorem ipsum dolor sit amet, qualisque repudiare ut his, verear phaedrum disputando cu nec. Nonumy iisque est ne, cu quo graeco dissentias. Id adipisci accommodare sea. Debet suscipit in ius, ad laboramus gloriatur voluptaria qui. Sit alii habeo no, qui elitr constituto id."
+                },
+                {
+                    "project_name": "Vim Package Manager",
+                    "project_description": "Lorem ipsum dolor sit amet, qualisque repudiare ut his, verear phaedrum disputando cu nec. Nonumy iisque est ne, cu quo graeco dissentias. Id adipisci accommodare sea. Debet suscipit in ius, ad laboramus gloriatur voluptaria qui. Sit alii habeo no, qui elitr constituto id."
+                }
+            ],
+            "inbox" : [
+                {
+                    "subject": "Message 1",
+                    "body" : "Ad tation reprehendunt sit, ne eum autem dolor consectetuer. Ipsum diceret delenit vis ea, elitr maiestatis te ius. Menandri electram interesset in quo, odio ocurreret cu mea. At nec consul corpora, in illum debet vocent sea, in nec vivendo deterruisset."
+                },
+                {
+                    "subject": "Message 2",
+                    "body": "Veritus nominavi appareat at mel, vel commune scriptorem ea. Suscipit oportere ne vel. Ea appareat constituam definitiones mel. Nobis utinam prodesset ne usu, vis ut utroque facilis voluptua, ut tale assueverit nec. Sit novum mundi moderatius ut, cu prodesset definitionem has, mel te sonet principes."
+                }
+            ],
+            "notifications" : [
+                {
+                    "subject": "Message 1",
+                    "body" : "Ad tation reprehendunt sit, ne eum autem dolor consectetuer. Ipsum diceret delenit vis ea, elitr maiestatis te ius. Menandri electram interesset in quo, odio ocurreret cu mea. At nec consul corpora, in illum debet vocent sea, in nec vivendo deterruisset."
+                },
+                {
+                    "subject": "Message 2",
+                    "body": "Veritus nominavi appareat at mel, vel commune scriptorem ea. Suscipit oportere ne vel. Ea appareat constituam definitiones mel. Nobis utinam prodesset ne usu, vis ut utroque facilis voluptua, ut tale assueverit nec. Sit novum mundi moderatius ut, cu prodesset definitionem has, mel te sonet principes."
+                }
+            ]
+
+            }
+    return render(request, "student.html", context)
