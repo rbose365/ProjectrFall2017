@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from forms import LoginForm
+from forms import LoginForm, RegisterForm
 
 # Create your views here.
 def index(request):
@@ -15,7 +15,13 @@ def login(request):
     return render(request, "login.html", { "form": form })
 
 def register(request):
-    return render(request, "register.html")
+    if request.method == "POST":
+        form = RegisterForm(request.POST)
+        form.is_valid()
+        print "Register Submitted:", form.cleaned_data
+    else:
+        form = RegisterForm()
+    return render(request, "register.html", { "form": form })
 
 def instructor(request):
     context = {

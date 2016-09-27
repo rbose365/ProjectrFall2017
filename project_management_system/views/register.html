@@ -8,37 +8,30 @@
 </div>
 
 <div class="row">
-    <form class="col s12" action="" method="put">
+    <form class="col s12" action="/register/" method="post">
+        {% csrf_token %}
         <div class="row">
             <div class="input-field col s4">
-                <input type="text" name="email" />
-                <label for="email">Email</label>
+                {{ form.email }}
+                <label for="{{ form.email.id_for_label }}">Email</label>
             </div>
         </div>
 
         <div class="row">
             <div class="input-field col s4">
-                <input type="password" name="password" />
-                <label for="password">Password</label>
+                {{ form.password }}
+                <label for="{{ form.password.id_for_label }}">Password</label>
             </div>
         </div>
 
         <div class="row">
             <div class="input-field col s4">
-                <p>
-                    <input type="radio" name="user_type" id="student_radio" />
-                    <label for="student_radio">Student</label>
-                </p>
-            
-                <p>
-                    <input type="radio" name="user_type" id="instructor_radio" />
-                    <label for="instructor_radio">Instructor</label>
-                </p>
-
-                <p>
-                    <input type="radio" name="user_type" id="client_radio" />
-                    <label for="client_radio">Client</label>
-                </p>
+                {% for radio in form.user_type %}
+                    <p>
+                        {{ radio.tag }}
+                        <label for="{{ radio.id_for_label }}">{{ radio.choice_label }}</label>
+                    </p>
+                {% endfor %}
             </div>
         </div>
 
