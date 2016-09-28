@@ -99,12 +99,12 @@ def student(request):
                 ],
             "notifications" : [
                 {
-                    "subject": "Message 1",
+                    "subject": "Notification 1",
                     "body" : "Ad tation reprehendunt sit, ne eum autem dolor consectetuer. Ipsum diceret delenit vis ea, elitr maiestatis te ius. Menandri\
                             electram interesset in quo, odio ocurreret cu mea. At nec consul corpora, in illum debet vocent sea, in nec vivendo deterruisset."
                 },
                 {
-                    "subject": "Message 2",
+                    "subject": "Notification 2",
                     "body": "Veritus nominavi appareat at mel, vel commune scriptorem ea. Suscipit oportere ne vel. Ea appareat constituam definitiones mel.\
                              Nobis utinam prodesset ne usu, vis ut utroque facilis voluptua, ut tale assueverit nec. Sit novum mundi moderatius ut, cu prodesset\
                              definitionem has, mel te sonet principes."
