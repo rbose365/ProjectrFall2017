@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row">
+    <div class="col s12 blue lighten-2">
+        <h3> Projects </h3>
+        <ul class="collapsible popout" data-collapsible="accordion">
+            {% for project in projects %}
+            <li>
+              <div class="collapsible-header"> {{ project.project_name }}</div>
+              <div class="collapsible-body">
+                <p> {{ project.project_description}}</p>
+                <div class="right-align"><a class="waves-effect eaves-light btn">View More</a></div>
+              </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+{% endblock content %}
