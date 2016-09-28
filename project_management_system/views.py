@@ -95,41 +95,41 @@ def student(request):
             }
     return render(request, "student.html", context)
 
-    def projects(request):
-        context = {
-            "projects" : [
-                {
-                    "project_name": "Space Race",
-                    "project_description": "Lorem ipsum dolor sit amet, qualisque repudiare ut his, verear phaedrum disputando cu nec. Nonumy iisque est ne, cu quo graeco dissentias. Id adipisci accommodare sea. Debet suscipit in ius, ad laboramus gloriatur voluptaria qui. Sit alii habeo no, qui elitr constituto id."
-                },
-                {
-                    "project_name": "Vim Package Manager",
-                    "project_description": "Lorem ipsum dolor sit amet, qualisque repudiare ut his, verear phaedrum disputando cu nec. Nonumy iisque est ne, cu quo graeco dissentias. Id adipisci accommodare sea. Debet suscipit in ius, ad laboramus gloriatur voluptaria qui. Sit alii habeo no, qui elitr constituto id."
-                },
-                {
-                    "project_name": "Space Race",
-                    "project_description": "Lorem ipsum dolor sit amet, qualisque repudiare ut his, verear phaedrum disputando cu nec. Nonumy iisque est ne, cu quo graeco dissentias. Id adipisci accommodare sea. Debet suscipit in ius, ad laboramus gloriatur voluptaria qui. Sit alii habeo no, qui elitr constituto id."
-                },
-                {
-                    "project_name": "Vim Package Manager",
-                    "project_description": "Lorem ipsum dolor sit amet, qualisque repudiare ut his, verear phaedrum disputando cu nec. Nonumy iisque est ne, cu quo graeco dissentias. Id adipisci accommodare sea. Debet suscipit in ius, ad laboramus gloriatur voluptaria qui. Sit alii habeo no, qui elitr constituto id."
-                },
-                {
-                    "project_name": "Space Race",
-                    "project_description": "Lorem ipsum dolor sit amet, qualisque repudiare ut his, verear phaedrum disputando cu nec. Nonumy iisque est ne, cu quo graeco dissentias. Id adipisci accommodare sea. Debet suscipit in ius, ad laboramus gloriatur voluptaria qui. Sit alii habeo no, qui elitr constituto id."
-                },
-                {
-                    "project_name": "Vim Package Manager",
-                    "project_description": "Lorem ipsum dolor sit amet, qualisque repudiare ut his, verear phaedrum disputando cu nec. Nonumy iisque est ne, cu quo graeco dissentias. Id adipisci accommodare sea. Debet suscipit in ius, ad laboramus gloriatur voluptaria qui. Sit alii habeo no, qui elitr constituto id."
-                },
-                {
-                    "project_name": "Space Race",
-                    "project_description": "Lorem ipsum dolor sit amet, qualisque repudiare ut his, verear phaedrum disputando cu nec. Nonumy iisque est ne, cu quo graeco dissentias. Id adipisci accommodare sea. Debet suscipit in ius, ad laboramus gloriatur voluptaria qui. Sit alii habeo no, qui elitr constituto id."
-                },
-                {
-                    "project_name": "Vim Package Manager",
-                    "project_description": "Lorem ipsum dolor sit amet, qualisque repudiare ut his, verear phaedrum disputando cu nec. Nonumy iisque est ne, cu quo graeco dissentias. Id adipisci accommodare sea. Debet suscipit in ius, ad laboramus gloriatur voluptaria qui. Sit alii habeo no, qui elitr constituto id."
-                }
-            ]
-        }
-        return render(request, "projects.html", context)
+def projects(request):
+    context = {
+        "projects" : [
+            {
+                "project_name": "Space Race",
+                "project_description": "Lorem ipsum dolor sit amet, qualisque repudiare ut his, verear phaedrum disputando cu nec. Nonumy iisque est ne, cu quo graeco dissentias. Id adipisci accommodare sea. Debet suscipit in ius, ad laboramus gloriatur voluptaria qui. Sit alii habeo no, qui elitr constituto id."
+            },
+            {
+                "project_name": "Vim Package Manager",
+                "project_description": "Lorem ipsum dolor sit amet, qualisque repudiare ut his, verear phaedrum disputando cu nec. Nonumy iisque est ne, cu quo graeco dissentias. Id adipisci accommodare sea. Debet suscipit in ius, ad laboramus gloriatur voluptaria qui. Sit alii habeo no, qui elitr constituto id."
+            },
+            {
+                "project_name": "Space Race",
+                "project_description": "Lorem ipsum dolor sit amet, qualisque repudiare ut his, verear phaedrum disputando cu nec. Nonumy iisque est ne, cu quo graeco dissentias. Id adipisci accommodare sea. Debet suscipit in ius, ad laboramus gloriatur voluptaria qui. Sit alii habeo no, qui elitr constituto id."
+            },
+            {
+                "project_name": "Vim Package Manager",
+                "project_description": "Lorem ipsum dolor sit amet, qualisque repudiare ut his, verear phaedrum disputando cu nec. Nonumy iisque est ne, cu quo graeco dissentias. Id adipisci accommodare sea. Debet suscipit in ius, ad laboramus gloriatur voluptaria qui. Sit alii habeo no, qui elitr constituto id."
+            },
+            {
+                "project_name": "Space Race",
+                "project_description": "Lorem ipsum dolor sit amet, qualisque repudiare ut his, verear phaedrum disputando cu nec. Nonumy iisque est ne, cu quo graeco dissentias. Id adipisci accommodare sea. Debet suscipit in ius, ad laboramus gloriatur voluptaria qui. Sit alii habeo no, qui elitr constituto id."
+            },
+            {
+                "project_name": "Vim Package Manager",
+                "project_description": "Lorem ipsum dolor sit amet, qualisque repudiare ut his, verear phaedrum disputando cu nec. Nonumy iisque est ne, cu quo graeco dissentias. Id adipisci accommodare sea. Debet suscipit in ius, ad laboramus gloriatur voluptaria qui. Sit alii habeo no, qui elitr constituto id."
+            },
+            {
+                "project_name": "Space Race",
+                "project_description": "Lorem ipsum dolor sit amet, qualisque repudiare ut his, verear phaedrum disputando cu nec. Nonumy iisque est ne, cu quo graeco dissentias. Id adipisci accommodare sea. Debet suscipit in ius, ad laboramus gloriatur voluptaria qui. Sit alii habeo no, qui elitr constituto id."
+            },
+            {
+                "project_name": "Vim Package Manager",
+                "project_description": "Lorem ipsum dolor sit amet, qualisque repudiare ut his, verear phaedrum disputando cu nec. Nonumy iisque est ne, cu quo graeco dissentias. Id adipisci accommodare sea. Debet suscipit in ius, ad laboramus gloriatur voluptaria qui. Sit alii habeo no, qui elitr constituto id."
+            }
+        ]
+    }
+    return render(request, "projects.html", context)
