@@ -35,6 +35,9 @@
             <li class="collection-item avatar">
                 <i class="material-icons circle red">assignment</i>
                 <span class="title">{{ project_bid.team_name }}</span>
+                {% for team_member_name in project_bid.team_member_names %}
+                    <p>{{ team_member_name }}</p>
+                {% endfor %}
             </li>
             {% endfor %}
         </ul>
