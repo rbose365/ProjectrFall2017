@@ -25,6 +25,7 @@ def register(request):
 
 def instructor(request):
     context = {
+            "professor_name" : "Prof. John Smith",
             "notifications" : [
                 { "notification_content": "Notification 1" },
                 { "notification_content": "Notification 2" }
