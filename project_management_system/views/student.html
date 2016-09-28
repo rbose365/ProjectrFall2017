@@ -7,39 +7,54 @@
 
 <div class="row">
     <div class="col s4 red lighten-2">
-        <ul class="list with-header">
+        <ul class="collection-item with-header">
             <li class "collection-header"><h4>Notifications</h4></li>
             {% for notification in notifications %}
-            <li class="card-panel avatar">
-                <i class="material-icons">error</i>
-                <span class="title">{{ notification.subject }}</span>
-                <p> {{ notification.body}} </p>
-            </li>
+                <li class="card">
+                    <div class="card-content avatar">
+                        <i class="material-icons">error</i>
+                        <span class="card-title">{{ notification.subject }}</span>
+                        <p> {{ notification.body}} </p>
+                    </div>
+                    <div class="card-action">
+                        <a href="#">Go to action</a>
+                    </div>
+                </li>
             {% endfor %}
         </ul>
     </div>
 
     <div class="col s4 green lighten-2">
-        <ul class="list with-header">
+        <ul class="collection-item with-header">
             <li class "collection-header"><h4>Inbox</h4></li>
             {% for message in inbox %}
-            <li class="card-panel avatar">
-                <i class="material-icons">email</i>
-                <span class="title">{{ message.subject }}</span>
-                <p> {{ message.body}} </p>
-            </li>
+                <li class="card">
+                    <div class="card-content avatar">
+                        <i class="material-icons">email</i>
+                        <span class="card-title">{{ message.subject }}</span>
+                        <p> {{ message.body}} </p>
+                    </div>
+                    <div class="card-action">
+                        <a href="#">Reply</a>
+                    </div>
+                </li>
             {% endfor %}
         </ul>
     </div>
 
     <div class="col s4 blue lighten-2">
-        <ul class="list with-header">
+        <ul class="collection-item with-header">
             <li class "collection-header"><h4>Projects</h4></li>
             {% for project in projects %}
-            <li class="card-panel avatar">
-                <i class="material-icons">assignment</i>
-                <span class="title">{{ project.project_name }}</span>
-                <p> {{ project.project_description}} </p>
+            <li class="card">
+                <div class="card-content avatar">
+                    <i class="material-icons">assignment</i>
+                    <span class="card-title">{{ project.project_name }}</span>
+                    <p> {{ project.project_description}} </p>
+                </div>
+                <div class="card-action">
+                    <a href="#">More Information</a>
+                    <a href="#">Contact Client</a>
             </li>
             {% endfor %}
         </ul>
