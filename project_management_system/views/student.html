@@ -33,10 +33,10 @@
     </div>
 
     <div class="col s4 blue lighten-2">
-        <ul class="list with-header">
+        <ul class="collection with-header">
             <li class "collection-header"><h4>Projects</h4></li>
             {% for project in projects %}
-            <li class="card-panel avatar">
+            <li class="collection-item avatar">
                 <i class="material-icons">assignment</i>
                 <span class="title">{{ project.project_name }}</span>
                 <p> {{ project.project_description}} </p>
