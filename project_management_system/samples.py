@@ -86,7 +86,7 @@ test_client = {
     ]
 }
 
-test_project = {
+test_projects = {
     "projects" : [
         {
             "project_name": "Space Race",
@@ -121,5 +121,12 @@ test_project = {
             "project_description": sample_text
         }
     ]
+}
+
+test_project = {
+    "project_name": "Space Race",
+    "project_description": sample_text,
+    "project_reqs" : "Python, Ruby, Java, SQL",
+    "project_tags": "fun, cool, interesting, tags"
 }
 

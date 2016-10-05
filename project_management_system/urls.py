@@ -27,5 +27,6 @@ urlpatterns = [
     url(r'^register/', views.register),
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.index),
-    url(r'^projects/', views.projects)
+    url(r'^projects/', views.projects),
+    url(r'^project/', views.project)
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

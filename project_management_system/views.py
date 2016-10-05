@@ -48,4 +48,7 @@ def student(request):
     return render(request, "student.html", test_student)
 
 def projects(request):
-    return render(request, "projects.html", test_project)
+    return render(request, "projects.html", test_projects)
+
+def project(request):
+    return render(request, "project.html", test_project)
