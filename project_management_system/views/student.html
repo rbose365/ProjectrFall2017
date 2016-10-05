@@ -15,7 +15,7 @@
                         <div class="card-content avatar white-text">
                             <i class="material-icons">error</i>
                             <span class="card-title">{{ notification.subject }}</span>
-                            <p> {{ notification.body}} </p>
+                            <p> {{ notification.body }} </p>
                         </div>
                         <div class="card-action">
                             <a href="#">Go to action</a>
@@ -34,7 +34,7 @@
                         <div class="card-content avatar white-text">
                             <i class="material-icons">email</i>
                             <span class="card-title">{{ message.subject }}</span>
-                            <p> {{ message.body}} </p>
+                            <p> {{ message.body }} </p>
                         </div>
                         <div class="card-action">
                             <a href="#">Reply</a>
@@ -43,6 +43,7 @@
                 </li>
             {% endfor %}
         </ul>
+        <a href="/messages/"><button class="btn waves-effect waves-light">View All Messages</button></a>
     </div>
 
     <div class="col s4">
@@ -54,16 +55,17 @@
                         <div class="card-content avatar white-text">
                             <i class="material-icons">assignment</i>
                             <span class="card-title">{{ project.project_name }}</span>
-                            <p> {{ project.project_description}} </p>
+                            <p> {{ project.project_description }} </p>
                         </div>
                         <div class="card-action">
-                            <a href="#">More Information</a>
+                            <a href="/project/">More Information</a>
                             <a href="#">Contact Client</a>
                         </div>
                     </div>
                 </li>
             {% endfor %}
         </ul>
+        <a href="/projects/"><button class="btn waves-effect waves-light">View All Projects</button></a>
     </div>
 </div>
 
