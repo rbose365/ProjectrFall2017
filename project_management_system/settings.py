@@ -73,10 +73,15 @@ WSGI_APPLICATION = 'project_management_system.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
+# TODO enter correct db info
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.path.join(BASE_DIR, 'db.mysql'),
+        'USER': 'tempuser',
+        'PASSWORD': 'temppassword',
+        'HOST': '',   # empty string means localhost
+        'PORT': '5432'
     }
 }
 
