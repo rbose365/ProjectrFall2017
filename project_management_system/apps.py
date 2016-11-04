@@ -4,4 +4,4 @@ from django.apps import AppConfig
 
 
 class PmsConfig(AppConfig):
-    name = 'Project Management System'
+    name = 'project_management_system'
