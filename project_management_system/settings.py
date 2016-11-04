@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'project_management_system.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'groupr'
+        'NAME': 'groupr',
         'USER': 'groupruser',
         'PASSWORD': 'teamdu97',
         'HOST': 'localhost',
