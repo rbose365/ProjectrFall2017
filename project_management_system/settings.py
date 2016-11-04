@@ -77,11 +77,11 @@ WSGI_APPLICATION = 'project_management_system.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.path.join(BASE_DIR, 'db.mysql'),
-        'USER': 'tempuser',
-        'PASSWORD': 'temppassword',
-        'HOST': '',   # empty string means localhost
-        'PORT': '5432'
+        'NAME': 'groupr'
+        'USER': 'groupruser',
+        'PASSWORD': 'teamdu97',
+        'HOST': 'localhost',
+        'PORT': ''
     }
 }
 
