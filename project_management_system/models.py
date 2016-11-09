@@ -16,9 +16,15 @@ class ChoiceTest(models.Model):
 # Real Models (that may work)
 
 class User(models.Model):
+    USER_TYPES = (
+        ('S', 'Student'),
+        ('I', 'Instructor'),
+        ('C', 'Client')
+    )
     email = models.CharField(max_length=255, primary_key=True)
     name = models.CharField(max_length=255)
     password = models.CharField(max_length=255)
+    user_type = models.CharField(max_length=1, choices=USER_TYPES)
 
 class Student(models.Model):
     email = models.CharField(max_length=255, primary_key=True))
