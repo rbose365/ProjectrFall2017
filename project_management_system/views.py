@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from forms import LoginForm, RegisterForm, ProjectSubmissionForm
-from models import User
+from models import User, Project
 from samples import *
 
 user_type_logged_in = None
@@ -82,7 +82,6 @@ def client(request):
         keywords = form.cleaned_data["keywords"]
         description = form.cleaned_data["description"]
 
-        # TODO the Project model needs all of these things
         new_project = Project(name=name,
                               requirements=requirements,
                               keywords=keywords,
@@ -91,17 +90,20 @@ def client(request):
         new_project.save()
     else:
         form = ProjectSubmissionForm()
-    return render(request, "client.html", test_client, { "form": form })
+        test_client["form"] = form
+    return render(request, "client.html", test_client)
 
 def student(request):
     return render(request, "student.html", test_student)
 
 def projects(request):
     # PSEUDO
-    # projects = Projects.objects.all() <- gets all projects
     # map to a dictionary for rendering
     # return render(request, "projects.html",  projects)
-    return render(request, "projects.html", test_projects)
+
+    # Read in all projects from the database, maybe we want to limit this to projects that are not awarded (or just remove projects that are awarded)
+    projects = Project.objects.all()
+    return render(request, "projects.html", { "projects": projects })
 
 def project(request):
     return render(request, "project.html", test_project)
