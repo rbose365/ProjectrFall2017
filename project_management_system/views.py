@@ -94,13 +94,10 @@ def client(request):
     return render(request, "client.html", test_client)
 
 def student(request):
+    test_student["projects"] = Project.objects.all()
     return render(request, "student.html", test_student)
 
 def projects(request):
-    # PSEUDO
-    # map to a dictionary for rendering
-    # return render(request, "projects.html",  projects)
-
     # Read in all projects from the database, maybe we want to limit this to projects that are not awarded (or just remove projects that are awarded)
     projects = Project.objects.all()
     return render(request, "projects.html", { "projects": projects })
