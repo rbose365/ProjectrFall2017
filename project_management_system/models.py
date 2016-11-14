@@ -32,6 +32,8 @@ class Group(models.Model):
 
 class Project(models.Model):
     name = models.CharField(max_length=255)
+    requirements = models.CharField(max_length=255)
+    keywords = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
     bid = models.ForeignKey(Bid, on_delete=models.CASCADE)   # For (Bid <-> Project) ; many to one
     question = models.ForeignKey(Question, on_delete=models.CASCADE)   # About (Question <-> Project) ; many to one

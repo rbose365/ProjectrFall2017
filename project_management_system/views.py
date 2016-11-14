@@ -1,9 +1,20 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from forms import LoginForm, RegisterForm
+from forms import LoginForm, RegisterForm, ProjectSubmissionForm
+from models import User
 from samples import *
 
 user_type_logged_in = None
+def redirect_user_to_homepage(user):
+    if user.user_type == 'S':
+        return HttpResponseRedirect("/student/")
+    elif user.user_type == 'I':
+        return HttpResponseRedirect("/instructor/")
+    elif user.user_type == 'C':
+        return HttpResponseRedirect("/client/")
+    else:
+        assert False, "Invalid user type for user " + user.email
+
 
 # Create your views here.
 def index(request):
@@ -13,27 +24,30 @@ def index(request):
 
 def login(request):
     if request.method == "POST":
+        blank_form = LoginForm() # Used only if the login fails
         form = LoginForm(request.POST)
         form.is_valid()
         print "Login Sumbitted:", form.cleaned_data
         email = form.cleaned_data["email"]
         password = form.cleaned_data["password"]
 
-        # DEMO check for hard-coded user for demo
-        print email, password
-        print test_student["email"] == email
-        global user_type_logged_in
-        if email == test_student["email"]:
-            user_type_logged_in = "student"
-            return HttpResponseRedirect("/student/")
-        elif email == test_instructor["email"]:
-            user_type_logged_in = "instructor"
-            return HttpResponseRedirect("/instructor/")
-        elif email == test_client["email"]:
-            user_type_logged_in = "client"
-            return HttpResponseRedirect("/client/")
-        # ENDDEMO
-    else:
+        # useful stuff
+        # https://docs.djangoproject.com/en/1.10/topics/db/queries/
+        # Retrieve user from the database:
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            # Re-render the login with a failure message
+            return render(request, "login.html", { "invalid_email": True, "form": blank_form })
+
+        # Check that the passwords match
+        if user.password == password:
+            # Redirect the user to their home page
+            return redirect_user_to_homepage(user)
+        else:
+            # Reject the login and notify that the password was wrong
+            return render(request, "login.html", { "invalid_password": True, "form": blank_form })
+    else: # GET request
         form = LoginForm()
     return render(request, "login.html", { "form": form })
 
@@ -41,7 +55,15 @@ def register(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)
         form.is_valid()
+        email = form.cleaned_data["email"]
+        password = form.cleaned_data["password"]
+        user_type = form.cleaned_data["user_type"]
         print "Register Submitted:", form.cleaned_data
+
+        new_user = User(email=email, password=password, user_type=user_type)
+        new_user.save() # save the new user to the database
+
+        return redirect_user_to_homepage(new_user)
     else:
         form = RegisterForm()
     return render(request, "register.html", { "form": form })
@@ -50,12 +72,35 @@ def instructor(request):
     return render(request, "instructor.html", test_instructor)
 
 def client(request):
-    return render(request, "client.html", test_client)
+    if request.method == "POST":
+        # User submitted a project, add this project to the database (first ask an instructor?)
+        form = ProjectSubmissionForm(request.POST)
+        form.is_valid()
+
+        name = form.cleaned_data["name"]
+        requirements = form.cleaned_data["requirements"]
+        keywords = form.cleaned_data["keywords"]
+        description = form.cleaned_data["description"]
+
+        # TODO the Project model needs all of these things
+        new_project = Project(name=name,
+                              requirements=requirements,
+                              keywords=keywords,
+                              description=description)
+
+        new_project.save()
+    else:
+        form = ProjectSubmissionForm()
+    return render(request, "client.html", test_client, { "form": form })
 
 def student(request):
     return render(request, "student.html", test_student)
 
 def projects(request):
+    # PSEUDO
+    # projects = Projects.objects.all() <- gets all projects
+    # map to a dictionary for rendering
+    # return render(request, "projects.html",  projects)
     return render(request, "projects.html", test_projects)
 
 def project(request):
