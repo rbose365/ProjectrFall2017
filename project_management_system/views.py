@@ -105,8 +105,10 @@ def projects(request):
     projects = Project.objects.all()
     return render(request, "projects.html", { "projects": projects })
 
-def project(request):
-    return render(request, "project.html", test_project)
+def project(request, project_id):
+    print project_id
+    proj = Project.objects.get(id=int(project_id))
+    return render(request, "project.html", { "project": proj })
 
 def messages(request):
     return render(request, "messages.html", test_messages)

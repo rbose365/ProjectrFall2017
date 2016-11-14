@@ -28,7 +28,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.index),
     url(r'^projects/', views.projects),
-    url(r'^project/', views.project),
+    url(r'^project/(\d+)', views.project),
     url(r'^menu/', views.menu),
     url(r'^messages/', views.messages)
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
