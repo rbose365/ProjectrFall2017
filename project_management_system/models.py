@@ -66,6 +66,6 @@ class Instructor(models.Model):
     sections = models.ManyToManyField(Section)   # Teaches (Instructor <-> Section) ; many to many
 
 class Message(models.Model):
-    sender = models.ForeignKey(User, on_delete=models.CASCADE)
-    recipient = models.ForeignKey(User, on_delete=models.CASCADE)
-    text = TextField()
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sender")
+    recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name="recipient")
+    text = models.TextField()
