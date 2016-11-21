@@ -51,15 +51,14 @@ class Question(models.Model):
 #     student = models.ForeignKey(Student, on_delete=models.CASCADE)   # Belongs to (Student <-> Group) ; many to one
 #     bid = models.ForeignKey(Bid, on_delete=models.CASCADE)   # Has (Group <-> Bid) ; one to many
 
+# class Instructor(models.Model):
+#     email = models.CharField(max_length=255, primary_key=True)
+#     sections = models.ManyToManyField(Section) # Teaches (Instructor <-> Section) ; many to many
+
 class Section(models.Model):
     name = models.CharField(max_length=255)
-    subject = models.CharField(max_length=255)
+    instructor = models.ForeignKey(User, on_delete=models.CASCADE)
 #     group = models.ForeignKey(Group, on_delete=models.CASCADE)   # Is in (Group <-> Section) ; many to one
-    projects = models.ManyToManyField(Project) # Can be awarded to (Section <-> Project) ; many to many
-
-class Instructor(models.Model):
-    email = models.CharField(max_length=255, primary_key=True)
-    sections = models.ManyToManyField(Section) # Teaches (Instructor <-> Section) ; many to many
 
 class Message(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sender")

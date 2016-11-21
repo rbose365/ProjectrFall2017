@@ -24,3 +24,6 @@ class MessageForm(forms.Form):
 class BidSubmissionForm(forms.Form):
     team_members = forms.CharField(widget=forms.TextInput, label="Team Members")
     description = forms.CharField(widget=forms.Textarea, label="Note to Instructors/Client")
+
+class NewSectionForm(forms.Form):
+    name = forms.CharField(widget=forms.TextInput, label="Section Name")

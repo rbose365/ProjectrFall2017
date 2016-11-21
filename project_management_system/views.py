@@ -3,8 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from forms import LoginForm, RegisterForm, ProjectSubmissionForm, MessageForm, BidSubmissionForm
-from models import Project, Message, Bid
+from forms import LoginForm, RegisterForm, ProjectSubmissionForm, MessageForm, BidSubmissionForm, NewSectionForm
+from models import Project, Message, Bid, Section
 
 def redirect_user_to_homepage(user_type):
     """
@@ -63,7 +63,11 @@ def register(request):
             user = authenticate(username=email, password=password)
             assert user is not None # Considering we just added this entry above, this should never happen
             login(request, user)
-            return redirect_user_to_homepage(user_type)
+            
+            if user_type == 'I':
+                return HttpResponseRedirect("/makesection/")
+            else:
+                return redirect_user_to_homepage(user_type)
         else:
             blank_form = RegisterForm()
             return render(request, "register.html", { "invalid": True, "form": blank_form })
@@ -176,6 +180,26 @@ def project_view(request, project_id):
 
 def messages(request):
     return render(request, "messages.html")
+
+
+@login_required
+def make_a_section(request):
+    if request.method == "POST":
+        # Class is being submitted
+        form = NewSectionForm(request.POST)
+        if form.is_valid():
+            name = form["name"]
+            new_section = Section(name=name, instructor=request.user)
+            new_section.save()
+            return redirect_user_to_homepage(request.user.profile.user_type) 
+    form = NewSectionForm()
+    sections = Section.objects.all()
+    context = {
+            "form": form,
+            "sections": sections
+    }
+    return render(request, "makesection.html", context)
+
 
 def menu(request):
     pass
