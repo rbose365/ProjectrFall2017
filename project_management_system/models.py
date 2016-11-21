@@ -38,9 +38,9 @@ class Question(models.Model):
     text = models.CharField(max_length=255)
     project = models.ForeignKey(Project, on_delete=models.CASCADE) # About (Question <-> Project) ; many to one
 
-class Student(models.Model):
-    email = models.CharField(max_length=255, primary_key=True)
-    question = models.ForeignKey(Question, on_delete=models.CASCADE) # Has a (Student <-> Question) ; one to many
+#class Student(models.Model):
+#    email = models.CharField(max_length=255, primary_key=True)
+#    question = models.ForeignKey(Question, on_delete=models.CASCADE) # Has a (Student <-> Question) ; one to many
 
 # class Client(models.Model):
 #     email = models.CharField(max_length=255, primary_key=True)

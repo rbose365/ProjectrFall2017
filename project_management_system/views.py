@@ -114,8 +114,8 @@ def student(request):
         form = MessageForm(request.POST)
         if form.is_valid():
             try:
-                # TODO sender = User.objects.get("""user with given email""")
-                # TODO recipient = User.objects.get(form.cleaned_data["recipient"])
+                sender = request.user
+                recipient = User.objects.get(email=form.cleaned_data["recipient"])
                 subject = form.cleaned_data["subject"]
                 text = form.cleaned_data["text"]
 
@@ -135,7 +135,7 @@ def student(request):
     projects = Project.objects.all()[:5] # This is efficient according to docs, although it doesn't look that way
     messages = Message.objects.filter(recipient__id=request.user.id)
     # TODO notifications
-    form = messageForm()
+    form = MessageForm()
     context = {
             "projects": projects,
             "inbox": messages,
