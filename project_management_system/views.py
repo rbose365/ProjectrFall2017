@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from forms import LoginForm, RegisterForm, ProjectSubmissionForm
+from forms import LoginForm, RegisterForm, ProjectSubmissionForm, MessageForm
 from models import Project
 
 def redirect_user_to_homepage(user_type):

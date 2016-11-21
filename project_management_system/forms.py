@@ -15,3 +15,7 @@ class ProjectSubmissionForm(forms.Form):
     requirements = forms.CharField(widget=forms.TextInput, label="Project Requirements")
     keywords = forms.CharField(widget=forms.TextInput, label="Keywords")
     description = forms.CharField(widget=forms.TextInput, label="Description")
+
+class MessageForm(forms.Form):
+    recipient = forms.CharField(widget=forms.TextInput, label="To")
+    text = forms.CharField(widget=forms.Textarea, label="Message Text")

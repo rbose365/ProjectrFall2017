@@ -64,3 +64,8 @@ class Section(models.Model):
 class Instructor(models.Model):
     email = models.CharField(max_length=255, primary_key=True)
     sections = models.ManyToManyField(Section)   # Teaches (Instructor <-> Section) ; many to many
+
+class Message(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE)
+    recipient = models.ForeignKey(User, on_delete=models.CASCADE)
+    text = TextField()
