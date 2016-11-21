@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from forms import LoginForm, RegisterForm, ProjectSubmissionForm, MessageForm
-from models import Project
+from models import Project, Message
 
 def redirect_user_to_homepage(user_type):
     """
@@ -105,7 +105,7 @@ def client(request):
 @login_required
 def student(request):
     projects = Project.objects.all()[:5] # This is efficient according to docs, although it doesn't look that way
-    messages = Message.objects.get(recipient__id=request.user.id)
+    messages = Message.objects.filter(recipient__id=request.user.id)
     # TODO notifications
     context = {
             "projects": projects,
