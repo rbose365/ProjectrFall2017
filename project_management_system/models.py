@@ -32,40 +32,43 @@ class Project(models.Model):
     requirements = models.CharField(max_length=255)
     keywords = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
-
-class Bid(models.Model):
-    description = models.CharField(max_length=255)
-    is_approved = models.BooleanField()
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)   # For (Bid <-> Project) ; many to one
+    client = models.ForeignKey(User, on_delete=models.CASCADE)
 
 class Question(models.Model):
     text = models.CharField(max_length=255)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)   # About (Question <-> Project) ; many to one
+    project = models.ForeignKey(Project, on_delete=models.CASCADE) # About (Question <-> Project) ; many to one
 
 class Student(models.Model):
     email = models.CharField(max_length=255, primary_key=True)
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)   # Has a (Student <-> Question) ; one to many
+    question = models.ForeignKey(Question, on_delete=models.CASCADE) # Has a (Student <-> Question) ; one to many
 
-class Client(models.Model):
-    email = models.CharField(max_length=255, primary_key=True)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)   # Contracted By (Client <-> Project) ; one to many
+# class Client(models.Model):
+#     email = models.CharField(max_length=255, primary_key=True)
+#     project = models.ForeignKey(Project, on_delete=models.CASCADE) # Contracted By (Client <-> Project) ; one to many
 
-class Group(models.Model):
-    name = models.CharField(max_length=255, primary_key=True)
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)   # Belongs to (Student <-> Group) ; many to one
-    bid = models.ForeignKey(Bid, on_delete=models.CASCADE)   # Has (Group <-> Bid) ; one to many
+# class Group(models.Model):
+#     name = models.CharField(max_length=255, primary_key=True)
+#     student = models.ForeignKey(Student, on_delete=models.CASCADE)   # Belongs to (Student <-> Group) ; many to one
+#     bid = models.ForeignKey(Bid, on_delete=models.CASCADE)   # Has (Group <-> Bid) ; one to many
 
 class Section(models.Model):
     name = models.CharField(max_length=255)
     subject = models.CharField(max_length=255)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE)   # Is in (Group <-> Section) ; many to one
-    projects = models.ManyToManyField(Project)   # Can be awarded to (Section <-> Project) ; many to many
+#     group = models.ForeignKey(Group, on_delete=models.CASCADE)   # Is in (Group <-> Section) ; many to one
+    projects = models.ManyToManyField(Project) # Can be awarded to (Section <-> Project) ; many to many
 
 class Instructor(models.Model):
     email = models.CharField(max_length=255, primary_key=True)
-    sections = models.ManyToManyField(Section)   # Teaches (Instructor <-> Section) ; many to many
+    sections = models.ManyToManyField(Section) # Teaches (Instructor <-> Section) ; many to many
 
 class Message(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sender")
     recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name="recipient")
     text = models.TextField()
+
+class Bid(models.Model):
+    team_members = models.CharField(max_length=255)
+    description = models.CharField(max_length=255)
+    is_approved = models.BooleanField()
+    project = models.ForeignKey(Project, on_delete=models.CASCADE) # For (Bid <-> Project) ; many to one
+    student = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -3,8 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from forms import LoginForm, RegisterForm, ProjectSubmissionForm, MessageForm
-from models import Project, Message
+from forms import LoginForm, RegisterForm, ProjectSubmissionForm, MessageForm, BidSubmissionForm
+from models import Project, Message, Bid
 
 def redirect_user_to_homepage(user_type):
     """
@@ -92,14 +92,20 @@ def client(request):
             new_project = Project(name=name,
                                   requirements=requirements,
                                   keywords=keywords,
-                                  description=description)
+                                  description=description,
+                                  client=request.user)
 
             new_project.save()
         else:
             # TODO indicate some kind of failure
             pass
     form = ProjectSubmissionForm()
-    return render(request, "client.html", { "form": form })
+    bids = Bid.objects.filter(project__client__id=request.user.id)
+    context = {
+            "bids": bids,
+            "form": form
+    }
+    return render(request, "client.html", context)
 
 
 @login_required
@@ -113,14 +119,36 @@ def student(request):
     }
     return render(request, "student.html", context)
 
+
 def projects(request):
     # Read in all projects from the database, maybe we want to limit this to projects that are not awarded (or just remove projects that are awarded)
     projects = Project.objects.all()
     return render(request, "projects.html", { "projects": projects })
 
-def project(request, project_id):
+
+@login_required
+def project_view(request, project_id):
     proj = Project.objects.get(id=int(project_id))
-    return render(request, "project.html", { "project": proj })
+    bid_success = False
+    if request.method == "POST":
+        # User submitted a bid on this project
+        form = BidSubmissionForm(request.POST)
+        if form.is_valid():
+            # TODO how do we know which instructor to assign to this?
+            team_members = form.cleaned_data["team_members"]
+            description = form.cleaned_data["description"]
+            new_bid = Bid(team_members=team_members, description=description, project=proj, is_approved=False, student=request.user)
+            new_bid.save()
+            bid_success = True
+
+            # TODO add a notification to this user
+    form = BidSubmissionForm()
+    context = {
+            "project": proj,
+            "form": form,
+            "success": bid_success # For showing a message that the bid was successfully saved
+    }
+    return render(request, "project.html", context)
 
 def messages(request):
     return render(request, "messages.html")

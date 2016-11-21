@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
+<!-- Display information about the project -->
 <div class="row">
   <div class="container">
     <h5>Name</h5>
@@ -13,8 +14,32 @@
     <p>{{ project.keywords }}</p>
     <h5>Client Email</h5>
     <p>filler@yaoo.com </p>
-    <a class="waves-effect eaves-light btn col s4">Make Bid</a>
   </div>
+</div>
+
+<!-- Form for students to submit a bid -->
+<div class="row">
+    <form class="col s12" action="/project/{{ project.id }}" method="post">
+        {% csrf_token %}
+        <div class="row">
+            <div class="input-field col s4">
+                {{ form.team_members }}
+                <label for="{{ form.team_members.id_for_label }}">Team Members</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s4">
+                {{ form.description }}
+                <label for="{{ form.description.id_for_label }}">Note to Instructor/Client</label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col s4">
+                <button class="btn waves-effect waves-light" type="submit">Submit Bid</button>
+            </div>
+        </div>
+    </form>
 </div>
 
 
