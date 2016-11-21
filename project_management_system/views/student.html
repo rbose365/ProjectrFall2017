@@ -34,7 +34,8 @@
                         <div class="card-content avatar white-text">
                             <i class="material-icons">email</i>
                             <span class="card-title">{{ message.subject }}</span>
-                            <p> {{ message.body }} </p>
+                            <p> {{ message.sender.email }}</p>
+                            <p> {{ message.text }} </p>
                         </div>
                         <div class="card-action">
                             <a href="#">Reply</a>
