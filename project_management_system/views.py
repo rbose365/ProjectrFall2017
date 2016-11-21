@@ -1,101 +1,111 @@
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from forms import LoginForm, RegisterForm, ProjectSubmissionForm
-from models import User, Project
-from samples import *
+from models import Project
 
-user_type_logged_in = None
-def redirect_user_to_homepage(user):
-    if user.user_type == 'S':
+def redirect_user_to_homepage(user_type):
+    """
+    Redirect a user to a particular home page based on their
+    user type (i.e student, instructor, client)
+    """
+    if user_type == 'S':
         return HttpResponseRedirect("/student/")
-    elif user.user_type == 'I':
+    elif user_type == 'I':
         return HttpResponseRedirect("/instructor/")
-    elif user.user_type == 'C':
+    elif user_type == 'C':
         return HttpResponseRedirect("/client/")
     else:
-        assert False, "Invalid user type for user " + user.email
+        assert False, "Invalid user type for user"
 
 
-# Create your views here.
 def index(request):
-    global user_type_logged_in
-    user_type_logged_in = None
     return render(request, "index.html")
 
-def login(request):
-    if request.method == "POST":
-        blank_form = LoginForm() # Used only if the login fails
+
+def login_view(request):
+    if request.method == "POST": # User attempting to log in
         form = LoginForm(request.POST)
         form.is_valid()
         print "Login Sumbitted:", form.cleaned_data
         email = form.cleaned_data["email"]
         password = form.cleaned_data["password"]
 
-        # useful stuff
-        # https://docs.djangoproject.com/en/1.10/topics/db/queries/
-        # Retrieve user from the database:
-        try:
-            user = User.objects.get(email=email)
-        except User.DoesNotExist:
-            # Re-render the login with a failure message
-            return render(request, "login.html", { "invalid_email": True, "form": blank_form })
-
-        # Check that the passwords match
-        if user.password == password:
-            # Redirect the user to their home page
-            return redirect_user_to_homepage(user)
+        user = authenticate(username=email, password=password)
+        if user is not None:
+            # User was successfully authenticated, redirect them to their home page
+            login(request, user)
+            return redirect_user_to_homepage(user.usertype.user_type)
         else:
             # Reject the login and notify that the password was wrong
+            blank_form = LoginForm()
             return render(request, "login.html", { "invalid_password": True, "form": blank_form })
     else: # GET request
         form = LoginForm()
-    return render(request, "login.html", { "form": form })
+        return render(request, "login.html", { "form": form })
+
 
 def register(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)
-        form.is_valid()
-        email = form.cleaned_data["email"]
-        password = form.cleaned_data["password"]
-        user_type = form.cleaned_data["user_type"]
-        print "Register Submitted:", form.cleaned_data
+        if form.is_valid():
+            email = form.cleaned_data["email"]
+            password = form.cleaned_data["password"]
+            user_type = form.cleaned_data["user_type"]
 
-        new_user = User(email=email, password=password, user_type=user_type)
-        new_user.save() # save the new user to the database
+            new_user = User.objects.create_user(email,
+                                                email=email,
+                                                password=password)
+            new_user.profile.user_type = user_type
+            new_user.save() # save the new user to the database
 
-        return redirect_user_to_homepage(new_user)
+            # TODO seems weird to save then immdiately authenticate from just-saved entry.
+            # Better way to do it?
+            user = authenticate(username=email, password=password)
+            assert user is not None # Considering we just added this entry above, this should never happen
+            login(request, user)
+            return redirect_user_to_homepage(user_type)
+        else:
+            blank_form = RegisterForm()
+            return render(request, "register.html", { "invalid": True, "form": blank_form })
     else:
         form = RegisterForm()
-    return render(request, "register.html", { "form": form })
+        return render(request, "register.html", { "form": form })
 
+
+# TODO
+#@login_required
 def instructor(request):
-    return render(request, "instructor.html", test_instructor)
+    return render(request, "instructor.html")
+
 
 def client(request):
     if request.method == "POST":
-        # User submitted a project, add this project to the database (first ask an instructor?)
+        # User submitted a project, add this project to the database
         form = ProjectSubmissionForm(request.POST)
-        form.is_valid()
+        if form.is_valid():
+            name = form.cleaned_data["name"]
+            requirements = form.cleaned_data["requirements"]
+            keywords = form.cleaned_data["keywords"]
+            description = form.cleaned_data["description"]
 
-        name = form.cleaned_data["name"]
-        requirements = form.cleaned_data["requirements"]
-        keywords = form.cleaned_data["keywords"]
-        description = form.cleaned_data["description"]
+            new_project = Project(name=name,
+                                  requirements=requirements,
+                                  keywords=keywords,
+                                  description=description)
 
-        new_project = Project(name=name,
-                              requirements=requirements,
-                              keywords=keywords,
-                              description=description)
+            new_project.save()
+        else:
+            # TODO indicate some kind of failure
+            pass
+    form = ProjectSubmissionForm()
+    return render(request, "client.html", { "form": form })
 
-        new_project.save()
-    else:
-        form = ProjectSubmissionForm()
-        test_client["form"] = form
-    return render(request, "client.html", test_client)
 
 def student(request):
-    test_student["projects"] = Project.objects.all()
-    return render(request, "student.html", test_student)
+    projects = Project.objects.all() # TODO limit to 5
+    return render(request, "student.html", { "projects": projects })
 
 def projects(request):
     # Read in all projects from the database, maybe we want to limit this to projects that are not awarded (or just remove projects that are awarded)
@@ -108,17 +118,18 @@ def project(request, project_id):
     return render(request, "project.html", { "project": proj })
 
 def messages(request):
-    return render(request, "messages.html", test_messages)
+    return render(request, "messages.html")
 
 def menu(request):
-    print user_type_logged_in
-    if user_type_logged_in is None:
-        return render(request, "index.html")
-    elif user_type_logged_in == "student":
-        return render(request, "student.html", test_student)
-    elif user_type_logged_in == "instructor":
-        return render(request, "instructor.html", test_instructor)
-    elif user_type_logged_in == "client":
-        return render(request, "client.html", test_client)
-    else:
-        assert False, "Should never reach here"
+    pass
+    # print user_type_logged_in
+    # if user_type_logged_in is None:
+    #     return render(request, "index.html")
+    # elif user_type_logged_in == "student":
+    #     return render(request, "student.html", test_student)
+    # elif user_type_logged_in == "instructor":
+    #     return render(request, "instructor.html", test_instructor)
+    # elif user_type_logged_in == "client":
+    #     return render(request, "client.html", test_client)
+    # else:
+    #     assert False, "Should never reach here"

@@ -127,3 +127,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "project_management_system/static")
 ]
+
+# Redirects user to this url if they try and view a page requiring authentication
+LOGIN_URL = "/login"

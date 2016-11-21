@@ -1,18 +1,31 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
-class User(models.Model):
+class Profile(models.Model):
     USER_TYPES = (
         ('S', 'Student'),
         ('I', 'Instructor'),
         ('C', 'Client')
     )
-    email = models.CharField(max_length=255, primary_key=True)
-    name = models.CharField(max_length=255)
-    password = models.CharField(max_length=255)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     user_type = models.CharField(max_length=1, choices=USER_TYPES)
+
+# These methods are for linking the Profile model with Django built-in User model for authentication
+# Reference: https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
+
 
 class Project(models.Model):
     name = models.CharField(max_length=255)
