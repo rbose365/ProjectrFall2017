@@ -41,13 +41,10 @@
     <div class="col s8">
         <ul class="collection with-header">
             <li class="collection-header"><h4>Bids on your projects:</h4></li>
-            {% for project_bid in project_bids %}
+            {% for bid in bids %}
                 <li class="collection-item avatar">
                     <i class="material-icons circle red">play_arrow</i>
-                    <span class="title">{{ project_bid.team_name }} bid on {{ project_bid.project_name }}</span>
-                    {% for team_member_name in project_bid.team_member_names %}
-                        <p>{{ team_member_name }}</p>
-                    {% endfor %}
+                    <span class="title">{{ bid.team_members }} bid on {{ bid.project.name }}</span>
                 </li>
             {% endfor %}
         </ul>

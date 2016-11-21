@@ -20,3 +20,7 @@ class MessageForm(forms.Form):
     recipient = forms.CharField(widget=forms.TextInput, label="To")
     subject = forms.CharField(widget=forms.TextInput, label="Subject")
     text = forms.CharField(widget=forms.Textarea, label="Message Text")
+
+class BidSubmissionForm(forms.Form):
+    team_members = forms.CharField(widget=forms.TextInput, label="Team Members")
+    description = forms.CharField(widget=forms.Textarea, label="Note to Instructors/Client")
