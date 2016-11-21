@@ -70,4 +70,35 @@
     </div>
 </div>
 
+<div class="col s4">
+    <!-- Submit a message form -->
+    <form class="col s4" action="/student/" method="post">
+        {% csrf_token %}
+        <h3>Send a Message</h3>
+        <div class="row">
+            <div class="input-field col s12">
+                {{ form.recipient }}
+                <label for="{{ form.recipient.id_for_label }}">To</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                {{ form.subject }}
+                <label for="{{ form.subject.id_for_label }}">Subject</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                {{ form.text }}
+                <label for="{{ form.text.id_for_label }}">Message Text</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s4">
+                <button class="btn waves-effect waves-light" type="submit">Send Message</button>
+            </div>
+        </div>
+    </form>
+</div>
+
 {% endblock content %}

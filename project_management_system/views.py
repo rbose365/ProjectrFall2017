@@ -104,12 +104,36 @@ def client(request):
 
 @login_required
 def student(request):
+    if request.method == "POST":
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            try:
+                # TODO sender = User.objects.get("""user with given email""")
+                # TODO recipient = User.objects.get(form.cleaned_data["recipient"])
+                subject = form.cleaned_data["subject"]
+                text = form.cleaned_data["text"]
+
+                new_message = Message(sender=sender,
+                                      recipient=recipient,
+                                      subject=subject,
+                                      text=text)
+
+                new_message.save()
+            except KeyError:  #TODO Is this the right error?
+                # TODO indicate that recipient does not exist
+                pass
+        else:
+            # TODO indicate some kind of failure
+            pass
+
     projects = Project.objects.all()[:5] # This is efficient according to docs, although it doesn't look that way
     messages = Message.objects.filter(recipient__id=request.user.id)
     # TODO notifications
+    form = messageForm()
     context = {
             "projects": projects,
-            "inbox": messages
+            "inbox": messages,
+            "form": form
     }
     return render(request, "student.html", context)
 

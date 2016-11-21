@@ -68,4 +68,5 @@ class Instructor(models.Model):
 class Message(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sender")
     recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name="recipient")
+    subject = models.CharField(max_length=255)
     text = models.TextField()

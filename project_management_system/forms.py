@@ -18,4 +18,5 @@ class ProjectSubmissionForm(forms.Form):
 
 class MessageForm(forms.Form):
     recipient = forms.CharField(widget=forms.TextInput, label="To")
+    subject = forms.CharField(widget=forms.TextInput, label="Subject")
     text = forms.CharField(widget=forms.Textarea, label="Message Text")
