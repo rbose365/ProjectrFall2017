@@ -36,7 +36,7 @@ def login_view(request):
             if user is not None:
                 # User was successfully authenticated, redirect them to their home page
                 login(request, user)
-                return redirect_user_to_homepage(user.usertype.user_type)
+                return redirect_user_to_homepage(user.profile.user_type)
 
         # Reject the login and notify that the email / password was wrong
         blank_form = LoginForm()
@@ -74,7 +74,7 @@ def register(request):
 
 @login_required
 def instructor(request):
-    messages = Message.objects.get(recipient__id=request.user.id)
+    messages = Message.objects.filter(recipient__id=request.user.id)
     return render(request, "instructor.html", { "inbox": messages })
 
 
