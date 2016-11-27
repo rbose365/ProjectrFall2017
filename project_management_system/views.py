@@ -7,7 +7,6 @@ from forms import LoginForm, RegisterForm, ProjectSubmissionForm, MessageForm, B
 from models import Project, Message, Bid, Section
 
 
-
 def redirect_user_to_homepage(user_type):
     """
     Redirect a user to a particular home page based on their
@@ -23,17 +22,13 @@ def redirect_user_to_homepage(user_type):
         assert False, "Invalid user type for user"
 
 
-def redirect_if_logged_in(user):
-    if user.is_authenticated:
-        redirect_user_to_homepage(user.profile.user_type)
-
-
 def index(request):
     return render(request, "index.html")
 
 
 def login_view(request):
-    redirect_if_logged_in(request.user)
+    if request.user.is_authenticated():
+        return redirect_user_to_homepage(request.user.profile.user_type)
 
     if request.method == "POST": # User attempting to log in
         form = LoginForm(request.POST)
@@ -56,7 +51,8 @@ def login_view(request):
 
 
 def register(request):
-    redirect_if_logged_in(request.user)
+    if request.user.is_authenticated():
+        return redirect_user_to_homepage(request.user.profile.user_type)
 
     if request.method == "POST":
         form = RegisterForm(request.POST)
@@ -195,12 +191,18 @@ def messages(request):
 
 
 @login_required
-def make_a_section(request):
+def make_a_section(request, section_id):
+    if section_id is not None:
+        # User is choosing to join an existing section
+        section = Section.objects.get(id=int(section_id))
+        section.instructors.add(request.user)
+        return redirect_user_to_homepage(request.user.profile.user_type)
+
     if request.method == "POST":
         # Class is being submitted
         form = NewSectionForm(request.POST)
         if form.is_valid():
-            name = form["name"]
+            name = form.cleaned_data["name"]
             new_section = Section(name=name)
             new_section.save()
             new_section.instructors.add(request.user)

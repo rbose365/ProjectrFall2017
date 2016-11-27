@@ -129,4 +129,4 @@ STATICFILES_DIRS = [
 ]
 
 # Redirects user to this url if they try and view a page requiring authentication
-LOGIN_URL = "/login"
+LOGIN_URL = "login/"
