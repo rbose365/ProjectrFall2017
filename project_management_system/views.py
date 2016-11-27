@@ -6,6 +6,8 @@ from django.http import HttpResponseRedirect
 from forms import LoginForm, RegisterForm, ProjectSubmissionForm, MessageForm, BidSubmissionForm, NewSectionForm
 from models import Project, Message, Bid, Section
 
+
+
 def redirect_user_to_homepage(user_type):
     """
     Redirect a user to a particular home page based on their
@@ -21,11 +23,18 @@ def redirect_user_to_homepage(user_type):
         assert False, "Invalid user type for user"
 
 
+def redirect_if_logged_in(user):
+    if user.is_authenticated:
+        redirect_user_to_homepage(user.profile.user_type)
+
+
 def index(request):
     return render(request, "index.html")
 
 
 def login_view(request):
+    redirect_if_logged_in(request.user)
+
     if request.method == "POST": # User attempting to log in
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -47,6 +56,8 @@ def login_view(request):
 
 
 def register(request):
+    redirect_if_logged_in(request.user)
+
     if request.method == "POST":
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -65,6 +76,7 @@ def register(request):
             login(request, user)
             
             if user_type == 'I':
+                # When an instructor is made, allow them to register a section
                 return HttpResponseRedirect("/makesection/")
             else:
                 return redirect_user_to_homepage(user_type)
@@ -189,8 +201,9 @@ def make_a_section(request):
         form = NewSectionForm(request.POST)
         if form.is_valid():
             name = form["name"]
-            new_section = Section(name=name, instructor=request.user)
+            new_section = Section(name=name)
             new_section.save()
+            new_section.instructors.add(request.user)
             return redirect_user_to_homepage(request.user.profile.user_type) 
     form = NewSectionForm()
     sections = Section.objects.all()

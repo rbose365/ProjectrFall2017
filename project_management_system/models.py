@@ -57,7 +57,7 @@ class Question(models.Model):
 
 class Section(models.Model):
     name = models.CharField(max_length=255)
-    instructor = models.ForeignKey(User, on_delete=models.CASCADE)
+    instructors = models.ManyToManyField(User)
 #     group = models.ForeignKey(Group, on_delete=models.CASCADE)   # Is in (Group <-> Section) ; many to one
 
 class Message(models.Model):
