@@ -183,7 +183,7 @@ def messages(request):
 
 @login_required
 def make_a_section(request, section_id):
-    if section_id is not None:
+    if section_id != "":
         # User is choosing to join an existing section
         section = Section.objects.get(id=int(section_id))
         section.instructors.add(request.user)
