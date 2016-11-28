@@ -1,25 +1,11 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from forms import LoginForm, RegisterForm, ProjectSubmissionForm, MessageForm, BidSubmissionForm, NewSectionForm
 from models import Project, Message, Bid, Section
-
-
-def redirect_user_to_homepage(user_type):
-    """
-    Redirect a user to a particular home page based on their
-    user type (i.e student, instructor, client)
-    """
-    if user_type == 'S':
-        return HttpResponseRedirect("/student/")
-    elif user_type == 'I':
-        return HttpResponseRedirect("/instructor/")
-    elif user_type == 'C':
-        return HttpResponseRedirect("/client/")
-    else:
-        assert False, "Invalid user type for user"
+from views_utils import redirect_user_to_homepage
 
 
 def index(request):
@@ -48,6 +34,11 @@ def login_view(request):
     else: # GET request
         form = LoginForm()
         return render(request, "login.html", { "form": form })
+
+
+def logout_view(request):
+    logout(request) # doesn't throw if user not logged in, just silently does nothing
+    return HttpResponseRedirect("/")
 
 
 def register(request):
@@ -214,18 +205,3 @@ def make_a_section(request, section_id):
             "sections": sections
     }
     return render(request, "makesection.html", context)
-
-
-def menu(request):
-    pass
-    # print user_type_logged_in
-    # if user_type_logged_in is None:
-    #     return render(request, "index.html")
-    # elif user_type_logged_in == "student":
-    #     return render(request, "student.html", test_student)
-    # elif user_type_logged_in == "instructor":
-    #     return render(request, "instructor.html", test_instructor)
-    # elif user_type_logged_in == "client":
-    #     return render(request, "client.html", test_client)
-    # else:
-    #     assert False, "Should never reach here"

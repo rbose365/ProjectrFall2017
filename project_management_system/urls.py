@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^instructor/', views.instructor),
     url(r'^student/', views.student),
     url(r'^login/', views.login_view),
+    url(r'^logout/', views.logout_view),
     url(r'^register/', views.register),
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.index),
