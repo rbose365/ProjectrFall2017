@@ -258,3 +258,31 @@ def reject_bid(request, bid_id):
                                          "Please continue browsing and submitting more bids.")
     new_notification.save()
     bid.delete()
+
+def send_message(request):
+    if request.method == "POST":
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            try:
+                sender = request.user
+                recipient = User.objects.get(email=form.cleaned_data["recipient"])
+                subject = form.cleaned_data["subject"]
+                text = form.cleaned_data["text"]
+
+                new_message = Message(sender=sender,
+                                      recipient=recipient,
+                                      subject=subject,
+                                      text=text)
+
+                new_message.save()
+            except KeyError:  #TODO Is this the right error?
+                # TODO indicate that recipient does not exist
+                pass
+        else:
+            # TODO indicate some kind of failure
+            pass
+    form = MessageForm()
+    context = {
+            "form": form,
+    }
+    return render(request, "sendmessage.html", context)
