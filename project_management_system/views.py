@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from forms import LoginForm, RegisterForm, ProjectSubmissionForm, MessageForm, BidSubmissionForm, NewSectionForm
-from models import Project, Message, Bid, Section
+from models import Project, Message, Bid, Section, Notification
 from views_utils import redirect_user_to_homepage
 
 
@@ -63,6 +63,13 @@ def register(request):
             login(request, user)
 
             if user_type == 'I' or user_type == 'S':
+
+                # Create an introduction notification
+                subject = "Welcome to Groupr"
+                body = "Anything is possible at Groupr. The infinite is possible at Groupr. The unattainable is unknown at Groupr. This Groupr. This is Groupr."
+                new_notif = Notification(recipient=user, subject=subject, text=body)
+                new_notif.save()
+
                 # When an instructor is made, allow them to register a section
                 return HttpResponseRedirect("/makesection/")
             else:
@@ -79,7 +86,8 @@ def register(request):
 def instructor(request):
     messages = Message.objects.filter(recipient__id=request.user.id)
     bids = Bid.objects.filter(instructors__id=request.user.id)
-    return render(request, "instructor.html", { "inbox": messages, "bids": bids })
+    notifications = Notification.objects.filter(recipient__id=request.user.id)
+    return render(request, "instructor.html", { "notifications":notifications, "inbox": messages, "bids": bids })
 
 
 @login_required
@@ -140,12 +148,13 @@ def student(request):
 
     projects = Project.objects.all()[:5] # This is efficient according to docs, although it doesn't look that way
     messages = Message.objects.filter(recipient__id=request.user.id)
-    # TODO notifications
+    notifications = Notification.objects.filter(recipient__id=request.user.id)
     form = MessageForm()
     context = {
             "projects": projects,
             "inbox": messages,
-            "form": form
+            "form": form,
+            "notifications": notifications
     }
     return render(request, "student.html", context)
 
@@ -168,7 +177,7 @@ def project_view(request, project_id):
             team_members = form.cleaned_data["team_members"]
             description = form.cleaned_data["description"]
             section = Section.objects.get(students__id=request.user.id)
-        
+
             # Get the instructors from the section
             # then new_bid.instructors.add(instructors)
             # also get the group for this student
@@ -176,7 +185,7 @@ def project_view(request, project_id):
             new_bid = Bid(team_members=team_members, description=description, project=proj, is_approved=False)
             new_bid.save()
             new_bid.instructors.set(section.instructors.all())
-            
+
             bid_success = True
 
             # TODO add a notification to this user
