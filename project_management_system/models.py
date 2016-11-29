@@ -73,3 +73,8 @@ class Bid(models.Model):
     is_approved = models.BooleanField()
     project = models.ForeignKey(Project, on_delete=models.CASCADE) # For (Bid <-> Project) ; many to one
     student = models.ForeignKey(User, on_delete=models.CASCADE)
+
+class Notification(models.Model):
+    recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name="recipient")
+    subject = models.CharField(max_length=255)
+    text = models.TextField()
