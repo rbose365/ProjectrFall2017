@@ -76,7 +76,7 @@ class Bid(models.Model):
     instructors = models.ManyToManyField(User, related_name="instructors_for_bid")
 
 class Notification(models.Model):
-    recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name="recipient")
+    recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name="notification_recipient")
     subject = models.CharField(max_length=255)
     text = models.TextField()
 
