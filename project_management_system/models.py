@@ -57,8 +57,8 @@ class Question(models.Model):
 
 class Section(models.Model):
     name = models.CharField(max_length=255)
-    instructors = models.ManyToManyField(User, related_name="instructors")
-    students = models.ManyToManyField(User, related_name="students")
+    instructors = models.ManyToManyField(User, related_name="instructors_for_section")
+    students = models.ManyToManyField(User, related_name="students_for_section")
 #     group = models.ForeignKey(Group, on_delete=models.CASCADE)   # Is in (Group <-> Section) ; many to one
 
 class Message(models.Model):
@@ -72,4 +72,11 @@ class Bid(models.Model):
     description = models.CharField(max_length=255)
     is_approved = models.BooleanField()
     project = models.ForeignKey(Project, on_delete=models.CASCADE) # For (Bid <-> Project) ; many to one
-    student = models.ForeignKey(User, on_delete=models.CASCADE)
+    #students = models.ManyToManyField(User, related_name="students")
+    instructors = models.ManyToManyField(User, related_name="instructors_for_bid")
+
+class Notification(models.Model):
+    recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name="notification_recipient")
+    subject = models.CharField(max_length=255)
+    text = models.TextField()
+
