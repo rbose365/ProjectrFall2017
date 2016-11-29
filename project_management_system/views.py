@@ -148,7 +148,7 @@ def student(request):
 
     projects = Project.objects.all()[:5] # This is efficient according to docs, although it doesn't look that way
     messages = Message.objects.filter(recipient__id=request.user.id)
-    notifications = Notification.objects.filter(recipient__id=request.user.id)
+    notifications = reversed(Notification.objects.filter(recipient__id=request.user.id))
     form = MessageForm()
     context = {
             "projects": projects,
@@ -173,7 +173,6 @@ def project_view(request, project_id):
         # User submitted a bid on this project
         form = BidSubmissionForm(request.POST)
         if form.is_valid():
-            # TODO how do we know which instructor to assign to this?
             team_members = form.cleaned_data["team_members"]
             description = form.cleaned_data["description"]
             section = Section.objects.get(students__id=request.user.id)
@@ -182,9 +181,13 @@ def project_view(request, project_id):
             new_bid.save()
             new_bid.instructors.set(section.instructors.all())
 
-            bid_success = True
+            bid_success = True # TODO notify the user on the UI that the bid was submitted
 
-            # TODO add a notification to this user
+            new_notification = Notification(recipient=request.user, subject="Bid on \"{}\" submitted.".format(proj.name),
+                                            text="You submitted a bid with team members {}.  \
+                                                  If the bid is awarded, you will receive \
+                                                  another notification here.".format(team_members))
+            new_notification.save()
     form = BidSubmissionForm()
     context = {
             "project": proj,
