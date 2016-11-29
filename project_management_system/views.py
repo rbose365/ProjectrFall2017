@@ -62,7 +62,7 @@ def register(request):
             assert user is not None # Considering we just added this entry above, this should never happen
             login(request, user)
             
-            if user_type == 'I':
+            if user_type == 'I' or user_type == 'S':
                 # When an instructor is made, allow them to register a section
                 return HttpResponseRedirect("/makesection/")
             else:
@@ -186,7 +186,12 @@ def make_a_section(request, section_id):
     if section_id != "":
         # User is choosing to join an existing section
         section = Section.objects.get(id=int(section_id))
-        section.instructors.add(request.user)
+        if request.user.profile.user_type == 'S':
+            section.students.add(request.user)
+        elif request.user.profile.user_type == 'I':
+            section.instructors.add(request.user)
+        else:
+            assert False, "Invalid user type"
         return redirect_user_to_homepage(request.user.profile.user_type)
 
     if request.method == "POST":
@@ -198,6 +203,7 @@ def make_a_section(request, section_id):
             new_section.save()
             new_section.instructors.add(request.user)
             return redirect_user_to_homepage(request.user.profile.user_type) 
+
     form = NewSectionForm()
     sections = Section.objects.all()
     context = {

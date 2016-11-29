@@ -2,22 +2,24 @@
 {% block content %}
 
 <div class="row">
-    <!-- Register a new section -->
-    <form class="col s4" action="/makesection/" method="post">
-        <h3>Create a New Section</h3>
-        {% csrf_token %}
-        <div class="row">
-            <div class="input-field col s12">
-                {{ form.name }}
-                <label for="{{ form.name.id_for_label }}">Section Name</label>
+    {% if user.profile.user_type == 'I' %}
+        <!-- Allow to register a new section if an instructor -->
+        <form class="col s4" action="/makesection/" method="post">
+            <h3>Create a New Section</h3>
+            {% csrf_token %}
+            <div class="row">
+                <div class="input-field col s12">
+                    {{ form.name }}
+                    <label for="{{ form.name.id_for_label }}">Section Name</label>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="input-field col s4">
-                <button class="btn waves-effect waves-light" type="submit">Create Section</button>
+            <div class="row">
+                <div class="input-field col s4">
+                    <button class="btn waves-effect waves-light" type="submit">Create Section</button>
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
+    {% endif %}
 
     <!-- Or present a list of sections to join -->
     <div class="col s8">
