@@ -178,11 +178,7 @@ def project_view(request, project_id):
             description = form.cleaned_data["description"]
             section = Section.objects.get(students__id=request.user.id)
 
-            # Get the instructors from the section
-            # then new_bid.instructors.add(instructors)
-            # also get the group for this student
-
-            new_bid = Bid(team_members=team_members, description=description, project=proj, is_approved=False)
+            new_bid = Bid(team_members=team_members, description=description, project=proj, is_approved=False, student=request.user)
             new_bid.save()
             new_bid.instructors.set(section.instructors.all())
 

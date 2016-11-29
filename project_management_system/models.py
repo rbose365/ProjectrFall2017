@@ -6,16 +6,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
-class Group(models.Model):
-    name = models.CharField(max_length=255, primary_key=True)
-
-
-class GroupInvitation(models.Model):
-    group = models.ForeignKey(Group, on_delete=models.CASCADE)
-    invitee = models.ForeignKey(User, related_name="invitee")
-    inviter = models.ForeignKey(User, related_name="inviter")
-
-
 class Profile(models.Model):
     USER_TYPES = (
         ('S', 'Student'),
@@ -24,7 +14,6 @@ class Profile(models.Model):
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     user_type = models.CharField(max_length=1, choices=USER_TYPES)
-    group = models.ForeignKey(Group, null=True)
 
 # These methods are for linking the Profile model with Django built-in User model for authentication
 # Reference: https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html
@@ -69,7 +58,7 @@ class Bid(models.Model):
     description = models.CharField(max_length=255)
     is_approved = models.BooleanField()
     project = models.ForeignKey(Project, on_delete=models.CASCADE) # For (Bid <-> Project) ; many to one
-    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
     instructors = models.ManyToManyField(User, related_name="instructors_for_bid")
 
 
