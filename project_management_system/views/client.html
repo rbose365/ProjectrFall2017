@@ -37,8 +37,22 @@
         </div>
     </form>
 
+    <!-- Show current projects -->
+    <div class="col s4">
+        <ul class="collection with-header">
+            <li class="collection-header"><h4>Your Projects:</h4></li>
+            {% for project in projects %}
+                <li class="collection-item avatar">
+                    <i class="material-icons circle red">business</i>
+                    <span class="title">{{project.name}}</span>
+                    <p> {{project.description}} </p>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
     <!-- Bids on your projects panel -->
-    <div class="col s8">
+    <div class="col s4">
         <ul class="collection with-header">
             <li class="collection-header"><h4>Bids on your projects:</h4></li>
             {% for bid in bids %}

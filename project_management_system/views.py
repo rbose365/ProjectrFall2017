@@ -61,7 +61,7 @@ def register(request):
             user = authenticate(username=email, password=password)
             assert user is not None # Considering we just added this entry above, this should never happen
             login(request, user)
-            
+
             if user_type == 'I' or user_type == 'S':
                 # When an instructor is made, allow them to register a section
                 return HttpResponseRedirect("/makesection/")
@@ -104,9 +104,11 @@ def client(request):
             pass
     form = ProjectSubmissionForm()
     bids = Bid.objects.filter(project__client__id=request.user.id)
+    projects = Project.objects.filter(client_id=request.user.id)
     context = {
             "bids": bids,
-            "form": form
+            "form": form,
+            "projects": projects
     }
     return render(request, "client.html", context)
 
@@ -202,7 +204,7 @@ def make_a_section(request, section_id):
             new_section = Section(name=name)
             new_section.save()
             new_section.instructors.add(request.user)
-            return redirect_user_to_homepage(request.user.profile.user_type) 
+            return redirect_user_to_homepage(request.user.profile.user_type)
 
     form = NewSectionForm()
     sections = Section.objects.all()
