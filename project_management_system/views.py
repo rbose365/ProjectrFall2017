@@ -78,7 +78,8 @@ def register(request):
 @login_required
 def instructor(request):
     messages = Message.objects.filter(recipient__id=request.user.id)
-    return render(request, "instructor.html", { "inbox": messages })
+    bids = Bid.objects.filter(instructors__id=request.user.id)
+    return render(request, "instructor.html", { "inbox": messages, "bids": bids })
 
 
 @login_required
@@ -164,8 +165,16 @@ def project_view(request, project_id):
             # TODO how do we know which instructor to assign to this?
             team_members = form.cleaned_data["team_members"]
             description = form.cleaned_data["description"]
-            new_bid = Bid(team_members=team_members, description=description, project=proj, is_approved=False, student=request.user)
+            section = Section.objects.get(students__id=request.user.id)
+        
+            # Get the instructors from the section
+            # then new_bid.instructors.add(instructors)
+            # also get the group for this student
+
+            new_bid = Bid(team_members=team_members, description=description, project=proj, is_approved=False)
             new_bid.save()
+            new_bid.instructors.set(section.instructors.all())
+            
             bid_success = True
 
             # TODO add a notification to this user
