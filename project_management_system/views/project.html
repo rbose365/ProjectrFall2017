@@ -3,39 +3,39 @@
 
 <!-- Display information about the project -->
 <div class="row">
-  <div class="container">
-    <h5>Name</h5>
-    <p>{{ project.name }}</p>
-    <h5>Project Description</h5>
+  <div class="col s4">
+    <h4 class="card-panel blue lighten-4 z-depth-2">{{ project.name }}</h4>
+    <h5>Description</h5>
     <p>{{ project.description }}</p>
     <h5>Requirements</h5>
     <p>{{ project.requirements }}</p>
     <h5>Keywords</h5>
     <p>{{ project.keywords }}</p>
     <h5>Client Email</h5>
-    <p>filler@yaoo.com </p>
+    <p>filler@yahoo.com</p>
   </div>
 </div>
 
 <!-- Form for students to submit a bid -->
 <div class="row">
-    <form class="col s12" action="/project/{{ project.id }}" method="post">
+    <form class="col s4" action="/project/{{ project.id }}" method="post">
+        <h5 class="card-panel blue lighten-4 z-depth-2">Bid Submission Form</h5>
         {% csrf_token %}
         <div class="row">
-            <div class="input-field col s4">
+            <div class="input-field">
                 {{ form.team_members }}
-                <label for="{{ form.team_members.id_for_label }}">Team Members</label>
+                <label for="{{ form.team_members.id_for_label }}">Team Member Names</label>
             </div>
         </div>
         <div class="row">
-            <div class="input-field col s4">
+            <div class="input-field">
                 {{ form.description }}
-                <label for="{{ form.description.id_for_label }}">Note to Instructor/Client</label>
+                <label for="{{ form.description.id_for_label }}">Note to Client/Instructor</label>
             </div>
         </div>
 
         <div class="row">
-            <div class="input-field col s4">
+            <div class="input-field">
                 <button class="btn waves-effect waves-light" type="submit">Submit Bid</button>
             </div>
         </div>

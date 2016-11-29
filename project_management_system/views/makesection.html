@@ -5,7 +5,7 @@
     {% if user.profile.user_type == 'I' %}
         <!-- Allow to register a new section if an instructor -->
         <form class="col s4" action="/makesection/" method="post">
-            <h3>Create a New Section</h3>
+            <h4 class="row card-panel blue lighten-4 z-depth-3">Create a New Section</h4>
             {% csrf_token %}
             <div class="row">
                 <div class="input-field col s12">
@@ -22,8 +22,8 @@
     {% endif %}
 
     <!-- Or present a list of sections to join -->
-    <div class="col s8">
-        <h3>Join an Existing Section</h3>
+    <div class="col s4">
+        <h4 class="row card-panel blue lighten-4 z-depth-3">Join an Existing Section</h4>
         <ul class="collection">
             {% for section in sections %}
                 <li class="collection-item">
