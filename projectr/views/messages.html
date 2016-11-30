@@ -21,7 +21,14 @@
       <ul class="collapsible popout col s12" data-collapsible="accordion" id="list-test">
           {% for message in messages %}
           <li>
-            <div class="collapsible-header"> {{ message.subject }}</div>
+            <div class="collapsible-header"> 
+              <div class="col s6">
+                {{ message.sender }}
+              </div>
+              <div class="col s6">
+                {{ message.subject}}
+              </div>
+            </div>
             <div class="collapsible-body white">
               <p>{{ message.text }}</p>
               <div class="row">
