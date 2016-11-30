@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
+from django.db import IntegrityError
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from forms import LoginForm, RegisterForm, ProjectSubmissionForm, MessageForm, BidSubmissionForm, NewSectionForm
@@ -45,6 +46,8 @@ def register(request):
     if request.user.is_authenticated():
         return redirect_user_to_homepage(request.user.profile.user_type)
 
+    blank_form = RegisterForm()
+
     if request.method == "POST":
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -52,11 +55,16 @@ def register(request):
             password = form.cleaned_data["password"]
             user_type = form.cleaned_data["user_type"]
 
-            new_user = User.objects.create_user(email,
-                                                email=email,
-                                                password=password)
-            new_user.profile.user_type = user_type
-            new_user.save() # save the new user to the database
+            try:
+                new_user = User.objects.create_user(email,
+                                                    email=email,
+                                                    password=password)
+                new_user.profile.user_type = user_type
+                new_user.save() # save the new user to the database
+            except IntegrityError:
+                # Duplicate email: notify the user and bail on registering
+                return render(request, "register.html", { "duplicate_email": True, "form": blank_form })
+
 
             user = authenticate(username=email, password=password)
             assert user is not None # Considering we just added this entry above, this should never happen
@@ -75,11 +83,9 @@ def register(request):
             else:
                 return redirect_user_to_homepage(user_type)
         else:
-            blank_form = RegisterForm()
             return render(request, "register.html", { "invalid": True, "form": blank_form })
     else:
-        form = RegisterForm()
-        return render(request, "register.html", { "form": form })
+        return render(request, "register.html", { "form": blank_form })
 
 
 @login_required
@@ -197,7 +203,8 @@ def project_view(request, project_id):
     return render(request, "project.html", context)
 
 def messages(request):
-    return render(request, "messages.html")
+    messages = Message.objects.filter(recipient__id=request.user.id)
+    return render(request, "messages.html", { "messages": messages })
 
 
 @login_required

@@ -1,5 +1,5 @@
 """
-WSGI config for project_management_system project.
+WSGI config for projectr project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project_management_system.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "projectr.settings")
 
 application = get_wsgi_application()
