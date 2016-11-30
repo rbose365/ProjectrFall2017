@@ -42,6 +42,8 @@
             {% endfor %}
         </ul>
         <a href="/messages/"><button class="btn waves-effect waves-light">View All Messages</button></a>
+        <a href="/sendmessage/"><button class="btn waves-effect waves-light">Send Message</button></a>
+
     </div>
 
     <div class="col s4">
@@ -61,37 +63,6 @@
         </ul>
         <a href="/projects/"><button class="btn waves-effect waves-light">View All Projects</button></a>
     </div>
-</div>
-
-<div class="row">
-    <!-- Submit a message form -->
-    <form class="col s4" action="/student/" method="post">
-        <h4 class="row card-panel blue lighten-4 z-depth-3">Send a Message</h4>
-        {% csrf_token %}
-        <div class="row">
-            <div class="input-field">
-                {{ form.recipient }}
-                <label for="{{ form.recipient.id_for_label }}">To (email)</label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="input-field">
-                {{ form.subject }}
-                <label for="{{ form.subject.id_for_label }}">Subject</label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="input-field">
-                {{ form.text }}
-                <label for="{{ form.text.id_for_label }}">Message Text</label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="input-field">
-                <button class="btn waves-effect waves-light" type="submit">Send Message</button>
-            </div>
-        </div>
-    </form>
 </div>
 
 {% endblock content %}
