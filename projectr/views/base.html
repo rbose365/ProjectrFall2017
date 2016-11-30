@@ -13,7 +13,8 @@
 </head>
 <body>
   <nav class="blue lighten-1" role="navigation">
-    <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo">Projectr</a>
+    <div class="nav-wrapper container">
+      <a id="logo-container" href="/" class="brand-logo">Projectr</a>
       <ul class="right hide-on-med-and-down">
         {% if user.is_authenticated %}
           <li><a href="/logout/">Logout</a></li>

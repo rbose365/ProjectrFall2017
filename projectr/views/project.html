@@ -40,6 +40,13 @@
             </div>
         </div>
     </form>
+    {% if bid_success %}
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                alert("Bid successfully submitted!");
+            });
+        </script>
+    {% endif %}
 </div>
 
 
