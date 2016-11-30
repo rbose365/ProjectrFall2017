@@ -242,14 +242,19 @@ def make_a_section(request, section_id):
 @login_required
 def award_bid(request, bid_id):
     bid = Bid.objects.get(id=int(bid_id))
-    bid.delete()
     new_notification = Notification(recipient=bid.student, subject="Bid on {} Awarded!".format(bid.project.name),
                                     text="Your bid on the project {} was awarded by your instructor(s)!" \
                                          "This will be your project.  Contact your client at {}".format(bid.project.name, bid.project.client.email))
     new_notification.save()
+    bid.delete()
     return redirect_user_to_homepage(request.user.profile.user_type)
 
 
-#@login_required
-
-
+@login_required
+def reject_bid(request, bid_id):
+    bid = Bid.objects.get(id=int(bid_id))
+    new_notification = Notification(recipient=bid.student, subject="Bid on {} Rejected".format(bid.project.name),
+                                    text="Your bid on the project {} was rejected by your instructor(s)." \
+                                         "Please continue browsing and submitting more bids.")
+    new_notification.save()
+    bid.delete()
