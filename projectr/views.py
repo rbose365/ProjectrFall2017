@@ -258,3 +258,4 @@ def reject_bid(request, bid_id):
                                          "Please continue browsing and submitting more bids.")
     new_notification.save()
     bid.delete()
+    return redirect_user_to_homepage(request.user.profile.user_type)
