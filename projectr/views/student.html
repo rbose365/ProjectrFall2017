@@ -17,9 +17,6 @@
                             <span class="card-title">{{ notification.subject }}</span>
                             <p> {{ notification.text }} </p>
                         </div>
-                        <!-- <div class="card-action"> -->
-                        <!--     <a href="#">Go to action</a> -->
-                        <!-- </div> -->
                     </div>
             {% endfor %}
         </ul>
@@ -57,10 +54,6 @@
                             <i class="material-icons">assignment</i>
                             <span class="card-title">{{ project.name }}</span>
                             <p> {{ project.description }} </p>
-                        </div>
-                        <div class="card-action">
-                            <a href="/project/{{ project.id }}">More Information</a>
-                            <a href="#">Contact Client</a>
                         </div>
                     </div>
                 </li>
