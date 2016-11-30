@@ -31,5 +31,7 @@ urlpatterns = [
     url(r'^projects/', views.projects),
     url(r'^project/(\d+)', views.project_view),
     url(r'^messages/', views.messages),
-    url(r'^makesection/(\d*)', views.make_a_section)
+    url(r'^makesection/(\d*)', views.make_a_section),
+    url(r'^awardbid/(\d*)', views.award_bid),
+    url(r'^rejectbid/(\d*)', views.reject_bid)
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

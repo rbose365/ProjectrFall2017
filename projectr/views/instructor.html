@@ -55,7 +55,10 @@
                             <p>Description: {{ bid.description }}</p>
                         </div>
                         <div class="card-action">
-                            <a href="#">Award Bid</a>
+                            <a href="/awardbid/{{ bid.id }}">Award Bid</a>
+                        </div>
+                        <div class="card-action">
+                            <a href="/rejectbid/{{ bid.id }}">Reject Bid</a>
                         </div>
                     </div>
                 </li>
