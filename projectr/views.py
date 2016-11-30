@@ -10,7 +10,10 @@ from views_utils import redirect_user_to_homepage
 
 
 def index(request):
-    return render(request, "index.html")
+    if request.user.is_authenticated():
+        return redirect_user_to_homepage(request.user.profile.user_type)
+    else:
+        return render(request, "index.html")
 
 
 def login_view(request):
@@ -198,7 +201,7 @@ def project_view(request, project_id):
     context = {
             "project": proj,
             "form": form,
-            "success": bid_success # For showing a message that the bid was successfully saved
+            "bid_success": bid_success # For showing a message that the bid was successfully saved
     }
     return render(request, "project.html", context)
 
