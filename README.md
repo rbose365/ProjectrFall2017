@@ -113,3 +113,11 @@ Once the database is generated, the application can be ran with the following co
 ```$ python manage.py runserver```
 
 ### Troubleshooting
+* During development, if Django database migrations are causing problems (error messages, etc.), the easiest fix is to just force it to re-create the entire development database
+  (do not do this in production!).  Delete the database in MySQL then delete the migrations, then follow the steps from Preparing the Database above to recreate it.
+
+```$ mysql -u <username> -p <root>```
+
+```> drop database projectr; exit```
+
+```$ rm projectr/migrations/00*```
