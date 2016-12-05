@@ -20,8 +20,7 @@ Potential clients can submit projects, students can bid on them, and instructors
 
 #### Instructor Features
 * Instructors can send and receive messages to other users
-* Instructors can see bids that have been submitted (bids include team member names and a description of why they should be awarded the project)m
-  and opt to accept or reject them.
+* Instructors can see bids that have been submitted (bids include team member names and a description of why they should be awarded the project) and opt to accept or reject them.
 * Instructors can view projects submitted by clients and either accept them or reject them.
 
 #### Client Features

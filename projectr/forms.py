@@ -13,7 +13,7 @@ class RegisterForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput, label="Password")
     user_type = forms.ChoiceField(widget=forms.RadioSelect, label="User Type",
                     choices=[("S", "Student"), ("I", "Instructor"), ("C", "Client")])
-    key = forms.CharField(widget=forms.TextInput, label="Instructor Key") # The magic key that allows you to register as an instructor
+    key = forms.CharField(widget=forms.TextInput, label="Instructor Key", required=False) # The magic key that allows you to register as an instructor
 
 class ProjectSubmissionForm(forms.Form):
     name = forms.CharField(widget=forms.TextInput, label="Project Name")
