@@ -152,12 +152,15 @@ def client(request):
     bids = Bid.objects.filter(project__client__id=request.user.id)
     projects = Project.objects.filter(client_id=request.user.id)
     questions = Question.objects.filter(project__client__id=request.user.id)
+    notifications = Notification.objects.filter(recipient__id=request.user.id)
+    print request.user.id
     context = {
             "bids": bids,
             "form": form,
             "projects": projects,
             "questions": questions,
-            "reply_form": reply_form
+            "reply_form": reply_form,
+            "notifications": notifications
     }
     return render(request, "client.html", context)
 
