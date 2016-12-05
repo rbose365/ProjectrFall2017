@@ -154,8 +154,8 @@ def client(request):
 
             new_project.save()
         else:
-            # TODO indicate some kind of failure
-            pass
+            blank_form = LoginForm()
+            return render(request, "client.html", { "invalid": True, "form": blank_form })
     form = ProjectSubmissionForm()
     reply_form = ReplyForm()
     bids = Bid.objects.filter(project__client__id=request.user.id)
