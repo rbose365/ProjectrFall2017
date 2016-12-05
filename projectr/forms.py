@@ -9,6 +9,7 @@ class RegisterForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput, label="Password")
     user_type = forms.ChoiceField(widget=forms.RadioSelect, label="User Type",
                     choices=[("S", "Student"), ("I", "Instructor"), ("C", "Client")])
+    key = forms.CharField(widget=forms.TextInput, label="Instructor Key")
 
 class ProjectSubmissionForm(forms.Form):
     name = forms.CharField(widget=forms.TextInput, label="Project Name")

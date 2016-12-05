@@ -129,3 +129,6 @@ STATICFILES_DIRS = [
 
 # Redirects user to this url if they try and view a page requiring authentication
 LOGIN_URL = "login/"
+
+# Key that instructors enter in order to register, so not just anybody can register as an instructor
+INSTRUCTOR_KEY = "test_key"

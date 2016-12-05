@@ -8,6 +8,7 @@ from forms import LoginForm, RegisterForm, ProjectSubmissionForm, MessageForm, \
         BidSubmissionForm, NewSectionForm, QuestionForm, ReplyForm
 from models import Project, Message, Bid, Section, Notification, Question
 from views_utils import redirect_user_to_homepage, create_introduction_notification
+from settings import INSTRUCTOR_KEY
 
 
 def index(request):
@@ -76,6 +77,9 @@ def register(request):
             email = form.cleaned_data["email"]
             password = form.cleaned_data["password"]
             user_type = form.cleaned_data["user_type"]
+
+            if user_type == "I" and form.cleaned_data["key"] != INSTRUCTOR_KEY:
+                return render(request, "register.html", { "form": blank_form })
 
             try: # Try and create the new user object
                 new_user = User.objects.create_user(email,
