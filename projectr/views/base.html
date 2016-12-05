@@ -1,59 +1,65 @@
+<!-- This file is the base header and footer that are common on all pages of the site.
+     Other HTML files in the project extend this page so that every page will have the header and footer
+     without duplicating all the code.
+     In order to extend this file, just make a new view and wrap the content in "block content" templates -->
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-  <title>{% block title %}Projectr{% endblock title %}</title>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+        <title>{% block title %}Projectr{% endblock title %}</title>
 
-  <!-- CSS  -->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="{% static "materialize/css/materialize.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
-  <link href="{% static "css/style.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
-</head>
-<body>
-  <nav class="blue lighten-1" role="navigation">
-    <div class="nav-wrapper container">
-      <a id="logo-container" href="/" class="brand-logo">Projectr</a>
-      <ul class="right hide-on-med-and-down">
-        {% if user.is_authenticated %}
-          <li><a href="/logout/">Logout</a></li>
-        {% endif %}
-      </ul>
-    </div>
-  </nav>
+        <!-- CSS, bring in materialize  -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="{% static "materialize/css/materialize.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+        <link href="{% static "css/style.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+    </head>
+    <body>
+        <nav class="blue lighten-1" role="navigation">
+            <div class="nav-wrapper container">
+                <a id="logo-container" href="/" class="brand-logo">Projectr</a>
+                <ul class="right hide-on-med-and-down">
+                    {% if user.is_authenticated %}
+                       <!-- Only show this button to logged in users -->
+                       <li><a href="/logout/">Logout</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
 
-  {% block content %}
+        {% block content %}
+           <!-- This is where a page extending this views' content will go -->
+        {% endblock content %}
 
-  {% endblock content %}
+        <footer class="page-footer blue-grey">
+            <div class="container">
+                <div class="row">
+                    <div class="col l6 s12">
+                        <h5 class="white-text">Projectr</h5>
+                    </div>
+                    <div class="col l3 s12 push-l3">
+                        <h5 class="white-text">Team DU</h5>
+                        <ul>
+                            <li><a class="white-text" href="#!">Jeremy Dorne</a></li>
+                            <li><a class="white-text" href="#!">Joshua Dotson</a></li>
+                            <li><a class="white-text" href="#!">Devin Johnston</a></li>
+                            <li><a class="white-text" href="#!">Robert Guthrie</a></li>
+                            <li><a class="white-text" href="#!">Kyle Yu</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-copyright">
+                <div class="container">
+                    Made by <a class="orange-text text-lighten-3" href="http://materializecss.com">Materialize</a>
+                </div>
+            </div>
+        </footer>
 
-  <footer class="page-footer blue-grey">
-    <div class="container">
-      <div class="row">
-        <div class="col l6 s12">
-          <h5 class="white-text">Projectr</h5>
-        </div>
-        <div class="col l3 s12 push-l3">
-          <h5 class="white-text">Team DU</h5>
-          <ul>
-            <li><a class="white-text" href="#!">Jeremy Dorne</a></li>
-            <li><a class="white-text" href="#!">Joshua Dotson</a></li>
-            <li><a class="white-text" href="#!">Devin Johnston</a></li>
-            <li><a class="white-text" href="#!">Robert Guthrie</a></li>
-            <li><a class="white-text" href="#!">Kyle Yu</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="footer-copyright">
-      <div class="container">
-      Made by <a class="orange-text text-lighten-3" href="http://materializecss.com">Materialize</a>
-      </div>
-    </div>
-  </footer>
-  <!--  Scripts-->
-  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script src="{% static "materialize/js/materialize.js" %}"></script>
-  <script src="{% static "js/init.js" %}"></script>
-</body>
+        <!--  Scripts-->
+        <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <script src="{% static "materialize/js/materialize.js" %}"></script>
+        <script src="{% static "js/init.js" %}"></script>
+    </body>
 </html>

@@ -1,7 +1,10 @@
+<!-- Instructor home page -->
 {% extends "base.html" %}
 {% block content %}
 
 <div class="row">
+
+    <!-- Notifications panel -->
     <div class="col s4">
         <ul class="collection with-header z-depth-3">
             <li class="collection-header blue lighten-4"><h4>Notifications</h4></li>
@@ -18,6 +21,7 @@
         </ul>
     </div>
 
+    <!-- Inbox panel -->
     <div class="col s4">
         <ul class="collection with-header z-depth-3">
             <li class="collection-header blue lighten-4"><h4>Inbox</h4></li>
@@ -38,9 +42,9 @@
         </ul>
         <a href="/messages/"><button class="btn waves-effect waves-light">View All Messages</button></a>
         <a href="/sendmessage/"><button class="btn waves-effect waves-light">Send Message</button></a>
-
     </div>
 
+    <!-- Outstanding bids from students go here -->
     <div class="col s4">
         <ul class="collection with-header z-depth-3">
             <li class="collection-header blue lighten-4"><h4>Project Bids</h4></li>
@@ -68,6 +72,7 @@
 </div>
 
 <div class="row">
+    <!-- Projects submitted by clients that have yet to be approved -->
     <div class="col s4">
         <ul class="collection with-header z-depth-3">
             <li class="collection-header blue lighten-4"><h4>Projects To Approve</h4></li>

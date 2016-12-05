@@ -20,6 +20,7 @@ from projectr import api_endpoints
 from django.conf import settings
 from django.conf.urls.static import static
 
+# view endpoints
 urlpatterns = [
     url(r'^client/', views.client),
     url(r'^instructor/', views.instructor),
@@ -36,6 +37,7 @@ urlpatterns = [
     url(r'^sendmessage/', views.send_message)
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
+# api endpoints
 urlpatterns += [
     url(r'^awardbid/(\d+)', api_endpoints.award_bid),
     url(r'^rejectbid/(\d+)', api_endpoints.reject_bid),

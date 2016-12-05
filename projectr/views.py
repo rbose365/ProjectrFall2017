@@ -131,6 +131,11 @@ def instructor(request):
 
 @login_required
 def client(request):
+    """
+    Render the client homepage.
+    Grabs what is needed for the client: their projects / bids, notifications, and any questions
+    on their projects
+    """
     if request.method == "POST":
         # User submitted a project, add this project to the database
         form = ProjectSubmissionForm(request.POST)
@@ -170,6 +175,10 @@ def client(request):
 
 @login_required
 def student(request):
+    """
+    Render the student homepage.
+    Gets a few projects to display as a sample, and any messages / notifications for the student
+    """
     if request.method == "POST":
         form = MessageForm(request.POST)
         if form.is_valid():
@@ -206,13 +215,20 @@ def student(request):
 
 
 def projects(request):
-    # Read in all projects from the database, maybe we want to limit this to projects that are not awarded (or just remove projects that are awarded)
-    projects = Project.objects.filter(is_approved=True)
+    """
+    Renders the view of the projects page (where users can browse a list of all projects in the system
+    """
+    # Read in all projects from the database
+    projects = Project.objects.filter(is_approved=True) # only get projects instructors have approved
     return render(request, "projects.html", { "projects": projects })
 
 
 @login_required
 def project_view(request, project_id):
+    """
+    Renders an individual project page, where users can ask questions, look at asked questions/responses,
+    and submit a bid.
+    """
     proj = Project.objects.get(id=int(project_id))
     bid_success = False
     if request.method == "POST":
@@ -246,13 +262,22 @@ def project_view(request, project_id):
     }
     return render(request, "project.html", context)
 
+
+@login_required
 def messages(request):
+    """
+    Render the inbox of the user sending the request
+    """
     messages = Message.objects.filter(recipient__id=request.user.id)
     return render(request, "messages.html", { "messages": messages })
 
 
 @login_required
 def make_a_section(request, section_id):
+    """
+    Render the page where instructors can go to make a new section and
+    students can go to join a section
+    """
     if section_id != "":
         # User is choosing to join an existing section
         section = Section.objects.get(id=int(section_id))
@@ -283,7 +308,11 @@ def make_a_section(request, section_id):
     return render(request, "makesection.html", context)
 
 
+@login_required
 def send_message(request):
+    """
+    Render page where students / instructors can go to send a message to other users
+    """
     if request.method == "POST":
         form = MessageForm(request.POST)
         if form.is_valid():
