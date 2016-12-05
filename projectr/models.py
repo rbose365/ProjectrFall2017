@@ -33,6 +33,7 @@ class Project(models.Model):
     keywords = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
     client = models.ForeignKey(User, on_delete=models.CASCADE)
+    is_approved = models.BooleanField()
 
 
 class Question(models.Model):

@@ -6,10 +6,14 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from forms import LoginForm, RegisterForm, ProjectSubmissionForm, MessageForm, BidSubmissionForm, NewSectionForm
 from models import Project, Message, Bid, Section, Notification
-from views_utils import redirect_user_to_homepage
+from views_utils import redirect_user_to_homepage, create_introduction_notification
 
 
 def index(request):
+    """
+    Authenticated users will be sent to their home pages,
+    unauthenticated users will be sent to the Login / Register home screen
+    """
     if request.user.is_authenticated():
         return redirect_user_to_homepage(request.user.profile.user_type)
     else:
@@ -17,6 +21,12 @@ def index(request):
 
 
 def login_view(request):
+    """
+    Endpoint for logins.
+    Logged in users will be redirected to their homepage.
+    If login fails, they will be redirected to /login to try again.
+    Successful login will authenticate them and send them to their homepage
+    """
     if request.user.is_authenticated():
         return redirect_user_to_homepage(request.user.profile.user_type)
 
@@ -41,11 +51,19 @@ def login_view(request):
 
 
 def logout_view(request):
+    """
+    Log the user out and return them to the Login/Register splash screen
+    """
     logout(request) # doesn't throw if user not logged in, just silently does nothing
     return HttpResponseRedirect("/")
 
 
 def register(request):
+    """
+    Endpoint for new users registering.
+    Authenticated users will just be redirected to their homepage.
+    If registration fails, the user is redirected to /register and an error appears
+    """
     if request.user.is_authenticated():
         return redirect_user_to_homepage(request.user.profile.user_type)
 
@@ -58,7 +76,7 @@ def register(request):
             password = form.cleaned_data["password"]
             user_type = form.cleaned_data["user_type"]
 
-            try:
+            try: # Try and create the new user object
                 new_user = User.objects.create_user(email,
                                                     email=email,
                                                     password=password)
@@ -70,33 +88,40 @@ def register(request):
 
 
             user = authenticate(username=email, password=password)
-            assert user is not None # Considering we just added this entry above, this should never happen
             login(request, user)
 
             if user_type == 'I' or user_type == 'S':
-
-                # Create an introduction notification
-                subject = "Welcome to Groupr"
-                body = "Anything is possible at Groupr. The infinite is possible at Groupr. The unattainable is unknown at Groupr. This Groupr. This is Groupr."
-                new_notif = Notification(recipient=user, subject=subject, text=body)
-                new_notif.save()
-
-                # When an instructor is made, allow them to register a section
+                # Create an introduction notification to display to the new user
+                create_introduction_notification(user)
+                # Allow instructors to join/create a section, students to join a section
                 return HttpResponseRedirect("/makesection/")
             else:
                 return redirect_user_to_homepage(user_type)
         else:
+            # The form data was bad, display an error
             return render(request, "register.html", { "invalid": True, "form": blank_form })
     else:
+        # The user did not try and register, and just needs to see the register form
         return render(request, "register.html", { "form": blank_form })
 
 
 @login_required
 def instructor(request):
+    """
+    Get all the information from the database to display an instructor's homepage (messages, notifications, bids etc.)
+    and then render the page
+    """
     messages = Message.objects.filter(recipient__id=request.user.id)
     bids = Bid.objects.filter(instructors__id=request.user.id)
     notifications = Notification.objects.filter(recipient__id=request.user.id)
-    return render(request, "instructor.html", { "notifications":notifications, "inbox": messages, "bids": bids })
+    projs_to_approve = Project.objects.filter(is_approved=False)
+    context = {
+        "notifications": notifications,
+        "inbox": messages,
+        "bids": bids,
+        "projects_to_approve": projs_to_approve
+    }
+    return render(request, "instructor.html", context)
 
 
 @login_required
@@ -114,7 +139,8 @@ def client(request):
                                   requirements=requirements,
                                   keywords=keywords,
                                   description=description,
-                                  client=request.user)
+                                  client=request.user,
+                                  is_approved=False)
 
             new_project.save()
         else:
@@ -155,7 +181,7 @@ def student(request):
             # TODO indicate some kind of failure
             pass
 
-    projects = Project.objects.all()[:5] # This is efficient according to docs, although it doesn't look that way
+    projects = Project.objects.filter(is_approved=True)[:5] # This is efficient according to docs, although it doesn't look that way
     messages = Message.objects.filter(recipient__id=request.user.id)
     notifications = reversed(Notification.objects.filter(recipient__id=request.user.id))
     form = MessageForm()
@@ -170,7 +196,7 @@ def student(request):
 
 def projects(request):
     # Read in all projects from the database, maybe we want to limit this to projects that are not awarded (or just remove projects that are awarded)
-    projects = Project.objects.all()
+    projects = Project.objects.filter(is_approved=True)
     return render(request, "projects.html", { "projects": projects })
 
 
@@ -241,27 +267,6 @@ def make_a_section(request, section_id):
     }
     return render(request, "makesection.html", context)
 
-
-@login_required
-def award_bid(request, bid_id):
-    bid = Bid.objects.get(id=int(bid_id))
-    new_notification = Notification(recipient=bid.student, subject="Bid on {} Awarded!".format(bid.project.name),
-                                    text="Your bid on the project {} was awarded by your instructor(s)!" \
-                                         "This will be your project.  Contact your client at {}".format(bid.project.name, bid.project.client.email))
-    new_notification.save()
-    bid.delete()
-    return redirect_user_to_homepage(request.user.profile.user_type)
-
-
-@login_required
-def reject_bid(request, bid_id):
-    bid = Bid.objects.get(id=int(bid_id))
-    new_notification = Notification(recipient=bid.student, subject="Bid on {} Rejected".format(bid.project.name),
-                                    text="Your bid on the project {} was rejected by your instructor(s)." \
-                                         "Please continue browsing and submitting more bids.")
-    new_notification.save()
-    bid.delete()
-    return redirect_user_to_homepage(request.user.profile.user_type)
 
 def send_message(request):
     if request.method == "POST":

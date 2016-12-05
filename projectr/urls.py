@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from projectr import views
+from projectr import api_endpoints
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -32,7 +33,12 @@ urlpatterns = [
     url(r'^project/(\d+)', views.project_view),
     url(r'^messages/', views.messages),
     url(r'^makesection/(\d*)', views.make_a_section),
-    url(r'^awardbid/(\d*)', views.award_bid),
-    url(r'^rejectbid/(\d*)', views.reject_bid),
     url(r'^sendmessage/', views.send_message)
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+urlpatterns += [
+    url(r'^awardbid/(\d+)', api_endpoints.award_bid),
+    url(r'^rejectbid/(\d+)', api_endpoints.reject_bid),
+    url(r'^approveproject/(\d+)', api_endpoints.approve_project),
+    url(r'^rejectproject/(\d+)', api_endpoints.reject_project)
+]
