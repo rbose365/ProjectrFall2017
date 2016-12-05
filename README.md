@@ -39,6 +39,8 @@ This is release 1.0 and there have been no previous releases.
 
 ### Bugs and Defects
 * The application aims to streamline the bidding and project submission process, and does not attempt to manage the lifetime of the project.
+* Email notifications are not sent, only in-app notifications are displayed for important events.
+* The server does not dump any logs about requests made to the server
 
 
 # Install Guide
@@ -92,12 +94,22 @@ Django needs to be told to do this.
 First create the database.
 
 1. Log into MySQL
+
 ```$ mysql -u <username> -p <password>```
+
 2. Create the "projectr" database
+
 ```> create database projectr; exit```
+
 3. Generate the migrations from Django (assuming your current directory is the root of the project)
+
 ```$ python manage.py makemigrations```
+
 ```$ python manage.py migrate```
 
+#### Running the Server
+Once the database is generated, the application can be ran with the following command
+
+```$ python manage.py runserver```
 
 ### Troubleshooting
