@@ -153,7 +153,6 @@ def client(request):
     projects = Project.objects.filter(client_id=request.user.id)
     questions = Question.objects.filter(project__client__id=request.user.id)
     notifications = Notification.objects.filter(recipient__id=request.user.id)
-    print request.user.id
     context = {
             "bids": bids,
             "form": form,

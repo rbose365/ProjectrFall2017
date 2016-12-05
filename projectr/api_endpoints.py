@@ -41,7 +41,6 @@ def reject_project(request, project_id):
                                     text="The instructor decided that your project submission was not right for the"
                                           "scope of the class and has decided not to allow students to bid on it.")
     new_notification.save()
-    print proj.client.email
     proj.delete()
     return redirect_user_to_homepage(request.user.profile.user_type)
 
