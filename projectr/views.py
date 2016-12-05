@@ -4,8 +4,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from forms import LoginForm, RegisterForm, ProjectSubmissionForm, MessageForm, BidSubmissionForm, NewSectionForm
-from models import Project, Message, Bid, Section, Notification
+from forms import LoginForm, RegisterForm, ProjectSubmissionForm, MessageForm, \
+        BidSubmissionForm, NewSectionForm, QuestionForm, ReplyForm
+from models import Project, Message, Bid, Section, Notification, Question
 from views_utils import redirect_user_to_homepage, create_introduction_notification
 
 
@@ -147,12 +148,16 @@ def client(request):
             # TODO indicate some kind of failure
             pass
     form = ProjectSubmissionForm()
+    reply_form = ReplyForm()
     bids = Bid.objects.filter(project__client__id=request.user.id)
     projects = Project.objects.filter(client_id=request.user.id)
+    questions = Question.objects.filter(project__client__id=request.user.id)
     context = {
             "bids": bids,
             "form": form,
-            "projects": projects
+            "projects": projects,
+            "questions": questions,
+            "reply_form": reply_form
     }
     return render(request, "client.html", context)
 
@@ -224,10 +229,14 @@ def project_view(request, project_id):
                                                   another notification here.".format(team_members))
             new_notification.save()
     form = BidSubmissionForm()
+    questions = Question.objects.filter(project__id=proj.id)
+    question_form = QuestionForm()
     context = {
             "project": proj,
             "form": form,
-            "bid_success": bid_success # For showing a message that the bid was successfully saved
+            "bid_success": bid_success, # For showing a message that the bid was successfully saved
+            "question_form": question_form,
+            "questions": questions
     }
     return render(request, "project.html", context)
 

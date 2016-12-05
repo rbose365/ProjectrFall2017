@@ -40,5 +40,7 @@ urlpatterns += [
     url(r'^awardbid/(\d+)', api_endpoints.award_bid),
     url(r'^rejectbid/(\d+)', api_endpoints.reject_bid),
     url(r'^approveproject/(\d+)', api_endpoints.approve_project),
-    url(r'^rejectproject/(\d+)', api_endpoints.reject_project)
+    url(r'^rejectproject/(\d+)', api_endpoints.reject_project),
+    url(r'^askquestion/(\d+)', api_endpoints.ask_question),
+    url(r'^replytoquestion/(\d+)', api_endpoints.reply_to_question)
 ]

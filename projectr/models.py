@@ -39,6 +39,8 @@ class Project(models.Model):
 class Question(models.Model):
     text = models.CharField(max_length=255)
     project = models.ForeignKey(Project, on_delete=models.CASCADE) # About (Question <-> Project) ; many to one
+    asker = models.ForeignKey(User, on_delete=models.CASCADE)
+    reply = models.CharField(max_length=255)
 
 
 class Section(models.Model):

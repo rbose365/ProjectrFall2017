@@ -65,4 +65,36 @@
     </div>
 </div>
 
+
+<!-- Questions on this clients projects -->
+<div class="row">
+    <div class="col s8">
+        <ul class="collection-header blue lighten-4"><h4>Questions on your projects:</h4></li>
+        {% for question in questions %}
+            <li class="collection-item avatar">
+                <span class="title">{{ question.project.name }}</span>
+                <p><b>Question Text:</b>{{ question.text }}</p>
+                <p><b>Reply to Question:</b></p>
+                <form action="/replytoquestion/{{ question.id }}" method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="input-field col s12">
+                            {{ reply_form.text }}
+                            <label for="{{ reply_form.text }}">Reply to Question</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-field col s4">
+                            <button class="btn waves-effect waves-light" type="submit">Submit Reply</button>
+                        </div>
+                    </div>
+                </form>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
+
+
 {% endblock content %}

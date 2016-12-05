@@ -27,3 +27,9 @@ class BidSubmissionForm(forms.Form):
 
 class NewSectionForm(forms.Form):
     name = forms.CharField(widget=forms.TextInput, label="Section Name")
+
+class QuestionForm(forms.Form):
+    question = forms.CharField(widget=forms.Textarea, label="Question Text")
+
+class ReplyForm(forms.Form):
+    text = forms.CharField(widget=forms.Textarea, label="Reply Text")
