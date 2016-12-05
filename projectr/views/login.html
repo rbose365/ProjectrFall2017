@@ -32,4 +32,13 @@
     </form>
 </div>
 
+{% if invalid %}
+<div class="card red darken-1">
+    <div class="card-content avatar white-text">
+        <i class="material-icons">error</i>
+                <span class="card-title">Invalid Login Credentials</span>
+    </div>
+</div>
+{% endif %}
+
 {% endblock content %}
