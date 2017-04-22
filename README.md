@@ -104,6 +104,8 @@ First create the database.
 
 ```$ python manage.py makemigrations```
 
+```(if you are running it dfor the first time use : $ python manage.py makemigrations projectr)```
+
 ```$ python manage.py migrate```
 
 #### Running the Server
