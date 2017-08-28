@@ -1,7 +1,7 @@
 ## Story/Task Details
-[]
-[]
-[]
+[ ]
+[ ]
+[ ]
 
 ## Acceptance Criteria
 * Given:
