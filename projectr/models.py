@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import User, Group
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+import random, string
 
 # =======================================================================================================
 class Profile(models.Model):
@@ -99,3 +100,15 @@ class Notification(models.Model):
     recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name="notification_recipient")
     subject = models.CharField(max_length=255)
     text = models.TextField()
+
+def random_word():
+    length = random.randrange(254)
+    return ''.join(random.choice(string.ascii_letters + string.digits) for i in range(length))
+
+class InstructorKey(models.Model):
+    """
+    Represents an Instructor Key used by instructors to create a section
+    """
+    key = models.CharField(max_length=255, default=random_word)
+    instructors = models.ManyToManyField(User, related_name="instructors_for_key", null=True, blank=True)
+    key_used = models.BooleanField(default=False)
