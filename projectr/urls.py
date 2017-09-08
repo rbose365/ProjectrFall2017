@@ -32,7 +32,7 @@ urlpatterns = [
     url(r'^$', views.index),
     url(r'^projects/', views.projects),
     url(r'^project/(\d+)', views.project_view),
-    url(r'^messages/', views.messages),
+    url(r'^messages/', views.messages_internal),
     url(r'^makesection/(\d*)', views.make_a_section),
     url(r'^sendmessage/', views.send_message)
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

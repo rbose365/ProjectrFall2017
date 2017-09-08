@@ -8,6 +8,7 @@ from forms import LoginForm, RegisterForm, ProjectSubmissionForm, MessageForm, \
         BidSubmissionForm, NewSectionForm, QuestionForm, ReplyForm
 from models import Project, Message, Bid, Section, Notification, Question, InstructorKey
 from views_utils import redirect_user_to_homepage, create_introduction_notification
+from django.contrib import messages
 
 
 def index(request):
@@ -83,7 +84,8 @@ def register(request):
 
             if user_type == "I" and currKey is None:
                 # TODO: The key was wrong - make a warning pop up
-                return render(request, "register.html", { "form": blank_form })
+                messages.add_message(request, messages.INFO, 'The Instructor key was incorrect')
+                return render(request, "register.html", { "form": form })
 
             try: # Try and create the new user object
                 new_user = User.objects.create_user(email,
@@ -124,13 +126,13 @@ def instructor(request):
     Get all the information from the database to display an instructor's homepage (messages, notifications, bids etc.)
     and then render the page
     """
-    messages = Message.objects.filter(recipient__id=request.user.id)
+    personalMessages = Message.objects.filter(recipient__id=request.user.id)
     bids = Bid.objects.filter(instructors__id=request.user.id)
     notifications = Notification.objects.filter(recipient__id=request.user.id)
     projs_to_approve = Project.objects.filter(is_approved=False)
     context = {
         "notifications": notifications,
-        "inbox": messages,
+        "inbox": personalMessages,
         "bids": bids,
         "projects_to_approve": projs_to_approve
     }
@@ -210,12 +212,12 @@ def student(request):
             pass
 
     projects = Project.objects.filter(is_approved=True)[:5] # This is efficient according to docs, although it doesn't look that way
-    messages = Message.objects.filter(recipient__id=request.user.id)
+    personalMessages = Message.objects.filter(recipient__id=request.user.id)
     notifications = reversed(Notification.objects.filter(recipient__id=request.user.id))
     form = MessageForm()
     context = {
             "projects": projects,
-            "inbox": messages,
+            "inbox": personalMessages,
             "form": form,
             "notifications": notifications
     }
@@ -272,12 +274,12 @@ def project_view(request, project_id):
 
 
 @login_required
-def messages(request):
+def messages_internal(request):
     """
     Render the inbox of the user sending the request
     """
-    messages = Message.objects.filter(recipient__id=request.user.id)
-    return render(request, "messages.html", { "messages": messages })
+    messages_internal = Message.objects.filter(recipient__id=request.user.id)
+    return render(request, "messages.html", { "messages": messages_internal })
 
 
 @login_required
