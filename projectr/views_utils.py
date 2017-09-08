@@ -13,7 +13,7 @@ def redirect_user_to_homepage(user_type):
     elif user_type == 'C':
         return HttpResponseRedirect("/client/")
     else:
-        return HttpResponseRedirect("/admin/")
+        assert False, "Invalid user type for user"
 
 
 def create_introduction_notification(user):

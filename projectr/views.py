@@ -17,6 +17,8 @@ def index(request):
     unauthenticated users will be sent to the Login / Register home screen
     """
     if request.user.is_authenticated():
+        if request.user.is_superuser:
+            return HttpResponseRedirect("/admin/")
         return redirect_user_to_homepage(request.user.profile.user_type)
     else:
         return render(request, "index.html")
