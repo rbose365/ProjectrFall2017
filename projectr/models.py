@@ -101,14 +101,13 @@ class Notification(models.Model):
     subject = models.CharField(max_length=255)
     text = models.TextField()
 
-def random_word():
-    length = random.randrange(254)
-    return ''.join(random.choice(string.ascii_letters + string.digits) for i in range(length))
+# TODO: Change where we put this, maybe in another file
+def random_key():
+        length = random.randrange(254)
+        return ''.join(random.choice(string.ascii_letters + string.digits) for i in range(length))
 
 class InstructorKey(models.Model):
     """
     Represents an Instructor Key used by instructors to create a section
     """
-    key = models.CharField(max_length=255, default=random_word)
-    instructors = models.ManyToManyField(User, related_name="instructors_for_key", null=True, blank=True)
-    key_used = models.BooleanField(default=False)
+    key = models.CharField(max_length=255, default=random_key, unique=True)

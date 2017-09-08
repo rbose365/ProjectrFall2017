@@ -6,9 +6,8 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from forms import LoginForm, RegisterForm, ProjectSubmissionForm, MessageForm, \
         BidSubmissionForm, NewSectionForm, QuestionForm, ReplyForm
-from models import Project, Message, Bid, Section, Notification, Question
+from models import Project, Message, Bid, Section, Notification, Question, InstructorKey
 from views_utils import redirect_user_to_homepage, create_introduction_notification
-from settings import INSTRUCTOR_KEY
 
 
 def index(request):
@@ -80,7 +79,10 @@ def register(request):
             password = form.cleaned_data["password"]
             user_type = form.cleaned_data["user_type"]
 
-            if user_type == "I" and form.cleaned_data["key"] != INSTRUCTOR_KEY:
+            currKey = InstructorKey.objects.filter(key = form.cleaned_data["key"]).first()
+
+            if user_type == "I" and currKey is None:
+                # TODO: The key was wrong - make a warning pop up
                 return render(request, "register.html", { "form": blank_form })
 
             try: # Try and create the new user object
@@ -88,6 +90,10 @@ def register(request):
                                                     email=email,
                                                     password=password)
                 new_user.profile.user_type = user_type
+                if user_type == 'I':
+                    currKey.delete()
+
+
                 new_user.save() # save the new user to the database
             except IntegrityError:
                 # Duplicate email: notify the user and bail on registering
