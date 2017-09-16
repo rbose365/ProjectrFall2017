@@ -1,8 +1,9 @@
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from views_utils import redirect_user_to_homepage
-from models import Bid, Notification, Project, Question
+from models import Bid, Notification, Project, Question, Section
 from forms import QuestionForm, ReplyForm
+from django.shortcuts import render
 
 @login_required
 def award_bid(request, bid_id):
@@ -65,4 +66,17 @@ def reply_to_question(request, question_id):
     if form.is_valid():
         question.reply = form.cleaned_data["text"]
         question.save()
+    return redirect_user_to_homepage(request.user.profile.user_type)
+
+@login_required
+def delete_a_section(request, section_id):
+    """
+    Deletes a section if it is not the last section
+    """
+    if section_id != "":
+        sections = Section.objects
+        if sections.count() != 1:
+            if sections.get(id=int(section_id)).students.count() == 0:
+                sections.get(id=int(section_id)).delete()
+        
     return redirect_user_to_homepage(request.user.profile.user_type)

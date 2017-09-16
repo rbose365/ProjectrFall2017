@@ -62,7 +62,6 @@ class Section(models.Model):
     the students bids
     """
     name = models.CharField(max_length=255)
-    instructors = models.ManyToManyField(User, related_name="instructors_for_section")
     students = models.ManyToManyField(User, related_name="students_for_section")
 
 
@@ -103,7 +102,7 @@ class Notification(models.Model):
 
 # TODO: Change where we put this, maybe in another file
 def random_key():
-        length = random.randrange(254)
+        length = random.randrange(20)
         return ''.join(random.choice(string.ascii_letters + string.digits) for i in range(length))
 
 class InstructorKey(models.Model):

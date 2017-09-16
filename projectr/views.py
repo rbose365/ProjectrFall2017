@@ -9,6 +9,7 @@ from forms import LoginForm, RegisterForm, ProjectSubmissionForm, MessageForm, \
 from models import Project, Message, Bid, Section, Notification, Question, InstructorKey
 from views_utils import redirect_user_to_homepage, create_introduction_notification
 from django.contrib import messages
+from django.core.exceptions import ObjectDoesNotExist
 
 
 def index(request):
@@ -83,7 +84,6 @@ def register(request):
             currKey = InstructorKey.objects.filter(key = form.cleaned_data["key"]).first()
 
             if user_type == "I" and currKey is None:
-                # TODO: The key was wrong - make a warning pop up
                 messages.add_message(request, messages.INFO, 'The Instructor key was incorrect')
                 return render(request, "register.html", { "form": form })
 
@@ -95,7 +95,6 @@ def register(request):
                 if user_type == 'I':
                     currKey.delete()
 
-
                 new_user.save() # save the new user to the database
             except IntegrityError:
                 # Duplicate email: notify the user and bail on registering
@@ -105,11 +104,12 @@ def register(request):
             user = authenticate(username=email, password=password)
             login(request, user)
 
-            if user_type == 'I' or user_type == 'S':
-                # Create an introduction notification to display to the new user
-                create_introduction_notification(user)
+            # Create an introduction notification to display to the new user
+            create_introduction_notification(user)
+
+            if user_type == 'S':
                 # Allow instructors to join/create a section, students to join a section
-                return HttpResponseRedirect("/makesection/")
+                return HttpResponseRedirect("/joinsection/")
             else:
                 return redirect_user_to_homepage(user_type)
         else:
@@ -130,12 +130,15 @@ def instructor(request):
     bids = Bid.objects.filter(instructors__id=request.user.id)
     notifications = Notification.objects.filter(recipient__id=request.user.id)
     projs_to_approve = Project.objects.filter(is_approved=False)
+    sections = Section.objects.all()
+
     context = {
         "notifications": notifications,
         "inbox": personalMessages,
         "bids": bids,
         "projects_to_approve": projs_to_approve
     }
+
     return render(request, "instructor.html", context)
 
 
@@ -189,6 +192,11 @@ def student(request):
     Render the student homepage.
     Gets a few projects to display as a sample, and any messages / notifications for the student
     """
+    try:
+        Section.objects.get(students__id=request.user.id)
+    except ObjectDoesNotExist:
+        return HttpResponseRedirect("/joinsection/")
+
     if request.method == "POST":
         form = MessageForm(request.POST)
         if form.is_valid():
@@ -283,7 +291,7 @@ def messages_internal(request):
 
 
 @login_required
-def make_a_section(request, section_id):
+def join_a_section(request, section_id):
     """
     Render the page where instructors can go to make a new section and
     students can go to join a section
@@ -293,11 +301,23 @@ def make_a_section(request, section_id):
         section = Section.objects.get(id=int(section_id))
         if request.user.profile.user_type == 'S':
             section.students.add(request.user)
-        elif request.user.profile.user_type == 'I':
-            section.instructors.add(request.user)
         else:
             assert False, "Invalid user type"
         return redirect_user_to_homepage(request.user.profile.user_type)
+
+    sections = Section.objects.all()
+
+    context = {
+            "sections": sections
+    }
+    return render(request, "joinsection.html", context)
+
+@login_required
+def manage_sections(request):
+    """
+    Render the page where instructors can go to make a new section or
+    edit existing ones.
+    """
 
     if request.method == "POST":
         # Class is being submitted
@@ -306,17 +326,40 @@ def make_a_section(request, section_id):
             name = form.cleaned_data["name"]
             new_section = Section(name=name)
             new_section.save()
-            new_section.instructors.add(request.user)
             return redirect_user_to_homepage(request.user.profile.user_type)
 
     form = NewSectionForm()
     sections = Section.objects.all()
     context = {
             "form": form,
-            "sections": sections
+            "sections": sections,
+            "listSize": sections.count()
     }
-    return render(request, "makesection.html", context)
+    return render(request, "managesection.html", context)
 
+@login_required
+def edit_a_section(request, section_id):
+    """
+    Render the page where instructors can go to make a new section and
+    students can go to join a section
+    """
+    if section_id != "":
+        # User is choosing to edit the section's name
+        form = NewSectionForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data["name"]
+            section = Section.objects.get(id=int(section_id))
+            setattr(section, "name", name)
+            section.save()
+            return redirect_user_to_homepage(request.user.profile.user_type)
+
+    form = NewSectionForm()
+    sections = Section.objects.all()
+    context = {
+            "form": form,
+            "section_id": section_id
+    }
+    return render(request, "editsection.html", context)
 
 @login_required
 def send_message(request):
