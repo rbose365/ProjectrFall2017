@@ -27,12 +27,14 @@
             {% for section in sections %}
                 <li class="collection-item">
                     {{ section.name }} :
+                    <span class="icon-block">
+                        <a href="/editsection/{{ section.id }}" class="btn">Edit</a>
+                    </span>
                     {% if listSize != 1 %}
                         {% if section.students.count == 0 %}
                             <a href="/deletesection/{{ section.id }}" class="btn"> Delete </a>
                         {% endif %}
                     {% endif %}
-                    <a href="/editsection/{{ section.id }}" class="btn">Edit</a>
                 </li>
             {% endfor %}
         </ul>
