@@ -18,15 +18,17 @@
     <body>
 		<ul id="profiledropdown" class="dropdown-content">
 		    <li><a href="#!">Edit Profile</a></li>
+			{% if user.profile.user_type == 'S' %}
+			<li><a href="#!">Change Section</a></li>
+			{% endif %}
 		</ul>
         <nav class="blue lighten-1" role="navigation">
             <div class="nav-wrapper container">
                 <a id="logo-container" href="/" class="brand-logo">Projectr</a>
                 <ul class="right hide-on-med-and-down">
+					{% if user.is_authenticated %}
 					<!-- Profile Dropdown Trigger -->
 					<li><a class="dropdown-button" href="#!" data-activates="profiledropdown" data-beloworigin="true"><i class="large material-icons">account_circle</i></a></li>
-                    {% if user.is_authenticated %}
-                       <!-- Only show this button to logged in users -->
                        <li><a href="/logout/">Logout</a></li>
                     {% endif %}
                 </ul>
