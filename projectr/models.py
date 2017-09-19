@@ -19,6 +19,7 @@ class Profile(models.Model):
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     user_type = models.CharField(max_length=1, choices=USER_TYPES)
+    section_id = models.IntegerField(null=True)
 
 # These methods are for linking the Profile model with Django built-in User model for authentication
 # Reference: https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html
@@ -63,7 +64,6 @@ class Section(models.Model):
     """
     name = models.CharField(max_length=255)
     students = models.ManyToManyField(User, related_name="students_for_section")
-
 
 class Message(models.Model):
     """
