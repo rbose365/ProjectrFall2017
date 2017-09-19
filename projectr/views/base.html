@@ -16,10 +16,15 @@
         <link href="{% static "css/style.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
     </head>
     <body>
+		<ul id="profiledropdown" class="dropdown-content">
+		    <li><a href="#!">Edit Profile</a></li>
+		</ul>
         <nav class="blue lighten-1" role="navigation">
             <div class="nav-wrapper container">
                 <a id="logo-container" href="/" class="brand-logo">Projectr</a>
                 <ul class="right hide-on-med-and-down">
+					<!-- Profile Dropdown Trigger -->
+					<li><a class="dropdown-button" href="#!" data-activates="profiledropdown" data-beloworigin="true"><i class="large material-icons">account_circle</i></a></li>
                     {% if user.is_authenticated %}
                        <!-- Only show this button to logged in users -->
                        <li><a href="/logout/">Logout</a></li>
@@ -27,7 +32,7 @@
                 </ul>
             </div>
         </nav>
-
+ 
         {% block content %}
            <!-- This is where a page extending this views' content will go -->
         {% endblock content %}
