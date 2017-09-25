@@ -5,11 +5,11 @@ from django.db import IntegrityError
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from forms import LoginForm, RegisterForm, ProjectSubmissionForm, MessageForm, \
-        BidSubmissionForm, NewSectionForm, QuestionForm, ReplyForm
-from models import Project, Message, Bid, Section, Notification, Question, InstructorKey
+        BidSubmissionForm, NewSectionForm, QuestionForm, ReplyForm, ProfileForm
+from models import Project, Message, Bid, Section, Notification, Question, InstructorKey, Tag
 from views_utils import redirect_user_to_homepage, create_introduction_notification
 from django.contrib import messages
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 
 def index(request):
@@ -401,3 +401,33 @@ def send_message(request):
             "form": form,
     }
     return render(request, "sendmessage.html", context)
+
+@login_required
+def profile(request):
+    """
+    Endpoint for new users registering.
+    Authenticated users will just be redirected to their homepage.
+    If registration fails, the user is redirected to /register and an error appears
+    """
+    blank_form = ProfileForm()
+
+    if request.method == "POST":
+        form = ProfileForm(request.POST)
+        if form.is_valid():
+            tags = form.cleaned_data["tags"]
+            #TODO: tags comma separated
+            new_tag = Tag(name=tags)
+            try:
+                Tag.objects.get(name=tags)
+                new_tag = Tag.objects.get(name=tags)
+            except ObjectDoesNotExist:
+                new_tag.save()
+            new_tag.students.add(request.user)
+            #TODO: if tag exists for same user
+            return render(request, "profile.html", {"form": form})
+        else:
+            # The form data was bad, display an error
+            return render(request, "profile.html", { "invalid": True, "form": blank_form })
+    else:
+        # The user did not try and register, and just needs to see the register form
+        return render(request, "profile.html", { "form": blank_form })

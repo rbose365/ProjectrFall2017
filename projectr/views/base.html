@@ -17,10 +17,11 @@
     </head>
     <body>
 		<ul id="profiledropdown" class="dropdown-content">
-		    <li><a href="#!">Edit Profile</a></li>
-			{% if user.profile.user_type == 'S' %}
+            {% if user.profile.user_type == 'S' %}
+
+            <li><a href="/profile/">Edit Profile</a></li>
 			<li><a href="/joinsection/">Change Section</a></li>
-			{% endif %}
+            {% endif %}
 		</ul>
         <nav class="blue lighten-1" role="navigation">
             <div class="nav-wrapper container">
@@ -34,7 +35,7 @@
                 </ul>
             </div>
         </nav>
- 
+
         {% block content %}
            <!-- This is where a page extending this views' content will go -->
         {% endblock content %}

@@ -33,3 +33,12 @@ footer.page-footer {
   bottom: 0;
   left: 0;
 }
+
+/*Headers for profile*/
+.profile-header {
+    margin-left: 0.75rem;
+}
+
+.your-tags {
+    margin-bottom: 0.75rem;
+}

@@ -47,3 +47,6 @@ class ReplyForm(forms.Form):
     This form is for a client replying to a student's question on their project.
     """
     text = forms.CharField(widget=forms.Textarea, label="Reply Text")
+
+class ProfileForm(forms.Form):
+    tags = forms.CharField(widget=forms.TextInput, label="Tags")

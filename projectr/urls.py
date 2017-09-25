@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^logout/', views.logout_view),
     url(r'^register/', views.register),
     url(r'^admin/', admin.site.urls),
+    url(r'^profile/', views.profile),
     url(r'^$', views.index),
     url(r'^projects/', views.projects),
     url(r'^project/(\d+)', views.project_view),

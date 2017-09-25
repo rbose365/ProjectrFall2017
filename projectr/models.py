@@ -110,3 +110,7 @@ class InstructorKey(models.Model):
     Represents an Instructor Key used by instructors to create a section
     """
     key = models.CharField(max_length=255, default=random_key, unique=True)
+
+class Tag(models.Model):
+    name = models.CharField(max_length=255)
+    students = models.ManyToManyField(User, related_name="students_for_tag")
