@@ -42,3 +42,7 @@ footer.page-footer {
 .your-tags {
     margin-bottom: 0.75rem;
 }
+
+.one-line-list {
+  display: inline;
+}

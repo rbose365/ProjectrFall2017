@@ -1,9 +1,11 @@
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from views_utils import redirect_user_to_homepage
-from models import Bid, Notification, Project, Question, Section
-from forms import QuestionForm, ReplyForm
+from models import Bid, Notification, Project, Question, Section, Tag
+from forms import QuestionForm, ReplyForm, ProfileForm
 from django.shortcuts import render
+from django.core.exceptions import ObjectDoesNotExist
+from django.contrib import messages
 
 @login_required
 def award_bid(request, bid_id):
@@ -78,5 +80,32 @@ def delete_a_section(request, section_id):
         if sections.count() != 1:
             if sections.get(id=int(section_id)).students.count() == 0:
                 sections.get(id=int(section_id)).delete()
-        
+
     return redirect_user_to_homepage(request.user.profile.user_type)
+
+@login_required
+def add_tag(request):
+    """
+    Adds tags to student's profile
+    """
+    if request.method == 'POST':
+        print("HERE@@@@@@@")
+        form = ProfileForm(request.POST)
+        if form.is_valid():
+            tags = form.cleaned_data["tags"]
+            #TODO: tags comma separated
+            new_tag = Tag(name=tags)
+            try:
+                Tag.objects.get(name=tags)
+                new_tag = Tag.objects.get(name=tags)
+                messages.add_message(request, messages.INFO, 'You cannot add the same tags!')
+                return HttpResponseRedirect("/profile/")
+            except ObjectDoesNotExist:
+                print("HERE")
+                new_tag.save()
+            new_tag.students.add(request.user)
+            #TODO: if tag exists for same user
+            return redirect_user_to_homepage(request.user.profile.user_type)
+        else:
+            # The form data was bad, display an error
+            return redirect_user_to_homepage(request.user.profile.user_type)

@@ -47,6 +47,7 @@ urlpatterns += [
     url(r'^approveproject/(\d+)', api_endpoints.approve_project),
     url(r'^rejectproject/(\d+)', api_endpoints.reject_project),
     url(r'^askquestion/(\d+)', api_endpoints.ask_question),
+    url(r'^addtag/', api_endpoints.add_tag),
     url(r'^deletesection/(\d+)', api_endpoints.delete_a_section),
     url(r'^replytoquestion/(\d+)', api_endpoints.reply_to_question)
 ]

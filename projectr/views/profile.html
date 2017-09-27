@@ -1,23 +1,38 @@
 {% extends "base.html" %}
 {% block content %}
+
+{% if messages%}
+<ul class="messages">
+    {% for message in messages %}
+    <script>alert('{{ message }}');</script>
+    {% endfor %}
+</ul>
+{% endif %}
+
+
 <div class="profile-header">
     <h2> Profile </h2>
     <h4>  Your Tags </h4>
-    <div class="your-tags">TagTest</div>
+    <ul class="one-line-list">
+    {% for tag in tagForThisUser %}
+        {{tag.name}}
+    {% endfor %}
+    </ul>
     <!--<h4>  Add Tags (Separate Each Tag with a Comma)</h4>-->
-
-</div>
-<form class="col s12" action="/profile/" method="post">
-  {% csrf_token %}
+<form class="col s12" action="/addtag/" method="post">
+  </div>
   <div class="row">
     <div class="input-field col s4">
         {{ form.tags }}
         <label for="{{ form.tags.id_for_label }}">Add Tags (Separate Each Tag with a Comma)</label>
-            <button class="btn waves-effect waves-light" type="submit">Submit</button>
-
     </div>
+  </div>
+
+  <div class="row">
+    {% csrf_token %}
+      <div class="input-field">
+        <button class="btn waves-effect waves-light" type="submit">Submit</button>
+      </div>
   </div>
 </form>
 {% endblock content %}
-
-

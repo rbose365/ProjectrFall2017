@@ -410,24 +410,10 @@ def profile(request):
     If registration fails, the user is redirected to /register and an error appears
     """
     blank_form = ProfileForm()
-
-    if request.method == "POST":
-        form = ProfileForm(request.POST)
-        if form.is_valid():
-            tags = form.cleaned_data["tags"]
-            #TODO: tags comma separated
-            new_tag = Tag(name=tags)
-            try:
-                Tag.objects.get(name=tags)
-                new_tag = Tag.objects.get(name=tags)
-            except ObjectDoesNotExist:
-                new_tag.save()
-            new_tag.students.add(request.user)
-            #TODO: if tag exists for same user
-            return render(request, "profile.html", {"form": form})
-        else:
-            # The form data was bad, display an error
-            return render(request, "profile.html", { "invalid": True, "form": blank_form })
-    else:
-        # The user did not try and register, and just needs to see the register form
-        return render(request, "profile.html", { "form": blank_form })
+    tagForThisUser = Tag.objects.filter(students__id=request.user.id)
+    print(len(tagForThisUser))
+    context = {
+            "tagForThisUser": tagForThisUser,
+            "form": blank_form
+    }
+    return render(request, "profile.html", context)
