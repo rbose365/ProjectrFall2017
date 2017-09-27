@@ -9,30 +9,37 @@
 </ul>
 {% endif %}
 
+<div class="row">
+    <div class="col s4">
+        <h4 class="card-panel blue lighten-4 z-depth-2"> Profile </h4>
+        <h5>  Your Tags </h5>
+        <ul>
+            {% for tag in tagForThisUser %}
+               {{tag.name}}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </ul>
 
-<div class="profile-header">
-    <h2> Profile </h2>
-    <h4>  Your Tags </h4>
-    <ul class="one-line-list">
-    {% for tag in tagForThisUser %}
-        {{tag.name}}
-    {% endfor %}
-    </ul>
-    <!--<h4>  Add Tags (Separate Each Tag with a Comma)</h4>-->
-<form class="col s12" action="/addtag/" method="post">
-  </div>
-  <div class="row">
-    <div class="input-field col s4">
-        {{ form.tags }}
-        <label for="{{ form.tags.id_for_label }}">Add Tags (Separate Each Tag with a Comma)</label>
     </div>
-  </div>
+</div>
 
-  <div class="row">
-    {% csrf_token %}
-      <div class="input-field">
-        <button class="btn waves-effect waves-light" type="submit">Submit</button>
+<div class="row">
+    <!--<h4>  Add Tags (Separate Each Tag with a Comma)</h4>-->
+    <form class="col s4" action="/addtag/" method="post">
+      <div class="row">
+        <div class="input-field">
+            {{ form.tags }}
+            <label for="{{ form.tags.id_for_label }}">Add Tags (Separate Each Tag with a Comma)</label>
+        </div>
       </div>
-  </div>
-</form>
+
+      <div class="row">
+        {% csrf_token %}
+          <div class="input-field">
+            <button class="btn waves-effect waves-light" type="submit">Submit</button>
+          </div>
+      </div>
+    </form>
+</div>
+
+
 {% endblock content %}

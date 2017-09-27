@@ -78,7 +78,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'projectr',
-        'USER': 'projectruser',
+        'USER': 'root',
         'PASSWORD': 'teamdu97',
         'HOST': 'localhost',
         'PORT': ''
