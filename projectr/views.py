@@ -296,15 +296,15 @@ def join_a_section(request, section_id):
     Render the page where instructors can go to make a new section and
     students can go to join a section
     """
-    # If User already belongs to a section, remove them from the original
-    if request.user.profile.section_id != None:
-        old_section = Section.objects.get(id=int(request.user.profile.section_id))
-        if request.user.profile.user_type == 'S':
-            old_section.students.remove(request.user.id)
-        else:
-            assert False, "Invalid user type"
     # Join section
     if section_id != "":
+        # If User already belongs to a section, remove them from the original
+        if request.user.profile.section_id != None:
+            old_section = Section.objects.get(id=int(request.user.profile.section_id))
+            if request.user.profile.user_type == 'S':
+                old_section.students.remove(request.user.id)
+            else:
+                assert False, "Invalid user type"
         section = Section.objects.get(id=int(section_id))
         if request.user.profile.user_type == 'S':
             section.students.add(request.user)
@@ -313,14 +313,13 @@ def join_a_section(request, section_id):
         else:
             assert False, "Invalid user type"
         return redirect_user_to_homepage(request.user.profile.user_type)
-
     sections = Section.objects.all()
 
     context = {
             "sections": sections
     }
     return render(request, "joinsection.html", context)
-
+    
 @login_required
 def manage_sections(request):
     """
