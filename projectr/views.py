@@ -335,7 +335,7 @@ def manage_sections(request):
             name = form.cleaned_data["name"]
             new_section = Section(name=name)
             new_section.save()
-            return redirect_user_to_homepage(request.user.profile.user_type)
+            return HttpResponseRedirect("/managesection/")
 
     form = NewSectionForm()
     sections = Section.objects.all()
@@ -360,7 +360,7 @@ def edit_a_section(request, section_id):
             section = Section.objects.get(id=int(section_id))
             setattr(section, "name", name)
             section.save()
-            return redirect_user_to_homepage(request.user.profile.user_type)
+            return HttpResponseRedirect("/managesection/")
 
     form = NewSectionForm()
     sections = Section.objects.all()

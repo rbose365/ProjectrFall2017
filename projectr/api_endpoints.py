@@ -81,7 +81,7 @@ def delete_a_section(request, section_id):
             if sections.get(id=int(section_id)).students.count() == 0:
                 sections.get(id=int(section_id)).delete()
 
-    return redirect_user_to_homepage(request.user.profile.user_type)
+    return HttpResponseRedirect("/managesection/")
 
 @login_required
 def add_tag(request):
