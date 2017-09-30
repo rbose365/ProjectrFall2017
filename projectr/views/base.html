@@ -27,7 +27,7 @@
             <div class="nav-wrapper container">
                 <a id="logo-container" href="/" class="brand-logo">Projectr</a>
                 <ul class="right hide-on-med-and-down">
-					{% if user.is_authenticated %}
+					{% if user.is_authenticated and user.profile.section_id != NULL %}
 					<!-- Profile Dropdown Trigger -->
 					<li><a class="dropdown-button" href="#!" data-activates="profiledropdown" data-beloworigin="true"><i class="large material-icons">account_circle</i></a></li>
                        <li><a href="/logout/">Logout</a></li>

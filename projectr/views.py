@@ -303,7 +303,7 @@ def join_a_section(request, section_id):
             old_section.students.remove(request.user.id)
         else:
             assert False, "Invalid user type"
-    # Add section
+    # Join section
     if section_id != "":
         section = Section.objects.get(id=int(section_id))
         if request.user.profile.user_type == 'S':
