@@ -35,8 +35,40 @@ footer.page-footer {
 }
 
 /*Headers for profile*/
-
-
 .one-line-list {
   display: inline;
+}
+
+/*Action Card Formatting*/
+.card .card-title {
+    font-size: 20px !important;
+}
+.card .card-content p {
+    font-size: 14px !important;
+}
+.options {
+    padding: 0px !important;
+    background: inherit;
+    width: 100%;
+    overflow: auto;
+}
+.action-left {
+    float: left;
+    display: inherit;
+    padding: 10px;
+    background: inherit;
+    width: 50%;
+    text-align: center;
+    border-top: 1px solid rgba(160, 160, 160, 0.2);
+    border-right: 1px solid rgba(160, 160, 160, 0.2);
+}
+.action-right {
+    float: right;
+    display: inherit;
+    padding: 10px;
+    background: inherit;
+    width: 50%;
+    text-align: center;
+    border-top: 1px solid rgba(160, 160, 160, 0.2);
+    border-left: 1px solid rgba(160, 160, 160, 0.2);
 }

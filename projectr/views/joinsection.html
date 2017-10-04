@@ -7,7 +7,7 @@
         <div class="col s4"></div>
         <!-- Show list of sections -->
         <div class="col s4">
-            <h4 class="row card-panel blue lighten-4 z-depth-3">Join a Section</h4>
+            <h5 class="row card-panel blue lighten-4 z-depth-3">Join a Section</h5>
             <ul class="collection">
                 {% for section in sections %}
                     {% if user.profile.section_id != section.id %}
@@ -24,7 +24,7 @@
     </div>
 {% else %}
     <div class="col s4">
-        <h4 class="row card-panel blue lighten-4 z-depth-3">There are no sections to join. Please contact your instructor then log out.</h4>
+        <h5 class="row card-panel blue lighten-4 z-depth-3">There are no sections to join. Please contact your instructor then log out.</h5>
     </div>
 {% endif %}
 {% endblock content %}

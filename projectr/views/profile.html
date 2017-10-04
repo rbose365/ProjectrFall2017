@@ -14,7 +14,7 @@
         <h4 class="card-panel blue lighten-4 z-depth-2"> Profile </h4>
         <h5>  Your Tags </h5>
         <ul>
-            {% for tag in tagForThisUser %}
+            {% for tag in tags %}
                {{tag.name}}{% if not forloop.last %}, {% endif %}
             {% endfor %}
         </ul>

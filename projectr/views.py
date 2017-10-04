@@ -127,7 +127,7 @@ def instructor(request):
     and then render the page
     """
     personalMessages = Message.objects.filter(recipient__id=request.user.id)
-    bids = Bid.objects.filter(instructors__id=request.user.id)
+    bids = Bid.objects.all()
     notifications = Notification.objects.filter(recipient__id=request.user.id)
     projs_to_approve = Project.objects.filter(is_approved=False)
     sections = Section.objects.all()
@@ -259,7 +259,6 @@ def project_view(request, project_id):
 
             new_bid = Bid(team_members=team_members, description=description, project=proj, is_approved=False, student=request.user)
             new_bid.save()
-            new_bid.instructors.set(section.instructors.all())
 
             bid_success = True # TODO notify the user on the UI that the bid was submitted
 
@@ -280,6 +279,18 @@ def project_view(request, project_id):
     }
     return render(request, "project.html", context)
 
+def bids(request):
+    """
+    Renders the view of the bids page, where users can browse a list of all bids in the system
+    """
+    # Read in all bids from the database
+    bids = Bid.objects.all() 
+    bid_count = bids.count();
+    context = {
+            "bids": bids,
+            "bid_count": bid_count
+    }
+    return render(request, "bids.html", context)
 
 @login_required
 def messages_internal(request):
@@ -408,11 +419,10 @@ def profile(request):
     Authenticated users will just be redirected to their homepage.
     If registration fails, the user is redirected to /register and an error appears
     """
-    blank_form = ProfileForm()
-    tagForThisUser = Tag.objects.filter(students__id=request.user.id)
-    print(len(tagForThisUser))
+    form = ProfileForm()
+    tags = Tag.objects.filter(students__id=request.user.id)
     context = {
-            "tagForThisUser": tagForThisUser,
-            "form": blank_form
+            "tags": tags,
+            "form": form
     }
     return render(request, "profile.html", context)

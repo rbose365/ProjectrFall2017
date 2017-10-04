@@ -107,4 +107,4 @@ def add_tag(request):
             return redirect_user_to_homepage(request.user.profile.user_type)
         else:
             # The form data was bad, display an error
-            return redirect_user_to_homepage(request.user.profile.user_type)
+            return HttpResponseRedirect("/profile/")

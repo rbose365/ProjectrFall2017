@@ -7,7 +7,7 @@
     <!-- Notifications panel -->
     <div class="col s4">
         <ul class="collection with-header z-depth-3">
-            <li class="collection-header blue lighten-4"><h4>Notifications</h4></li>
+            <li class="collection-header blue lighten-4"><h5>Notifications</h5></li>
             {% for notification in notifications %}
                 <li class="collection-item">
                     <div class="card blue-grey darken-1">
@@ -24,7 +24,7 @@
     <!-- Inbox panel -->
     <div class="col s4">
         <ul class="collection with-header z-depth-3">
-            <li class="collection-header blue lighten-4"><h4>Inbox</h4></li>
+            <li class="collection-header blue lighten-4"><h5>Inbox</h5></li>
             {% for message in inbox %}
                 <li class="collection-item">
                     <div class="card blue-grey darken-1">
@@ -47,27 +47,30 @@
     <!-- Outstanding bids from students go here -->
     <div class="col s4">
         <ul class="collection with-header z-depth-3">
-            <li class="collection-header blue lighten-4"><h4>Project Bids</h4></li>
+            <li class="collection-header blue lighten-4"><h5>Project Bids</h5></li>
             {% for bid in bids %}
                 <li class="collection-item">
                     <div class="card blue-grey darken-1">
                         <div class="card-content avatar white-text">
                             <i class="material-icons">assignment</i>
                             <span class="card-title">{{ bid.project.name }}</span>
-                            <p><b>Biddees:</b> {{ bid.team_members }}</p>
+                            <p><b>Team Members:</b> {{ bid.team_members }}</p>
                             <br />
-                            <p><b>Bid Description:</b> {{ bid.description }}</p>
+                            <p><b>Description:</b> {{ bid.description }}</p>
                         </div>
-                        <div class="card-action">
-                            <a href="/awardbid/{{ bid.id }}">Award Bid</a>
-                        </div>
-                        <div class="card-action">
-                            <a href="/rejectbid/{{ bid.id }}">Reject Bid</a>
+                        <div class="card-action options">
+                            <div class="action-left">
+                                <a href="/awardbid/{{ bid.id }}">Award Bid</a>
+                            </div>
+                            <div class="action-right">
+                                <a href="/rejectbid/{{ bid.id }}">Reject Bid</a>
+                            </div>
                         </div>
                     </div>
                 </li>
             {% endfor %}
         </ul>
+        <a href="/bids/"><button class="btn waves-effect waves-light">View All Bids</button></a>
     </div>
 </div>
 
@@ -75,7 +78,7 @@
     <!-- Projects submitted by clients that have yet to be approved -->
     <div class="col s4">
         <ul class="collection with-header z-depth-3">
-            <li class="collection-header blue lighten-4"><h4>Projects To Approve</h4></li>
+            <li class="collection-header blue lighten-4"><h5>Projects To Approve</h5></li>
             {% for project in projects_to_approve %}
                 <li class="collection-item">
                     <div class="card blue-grey darken-1">
@@ -86,11 +89,13 @@
                             <br />
                             <p><b>Project Description:</b> {{ project.description }}</p>
                         </div>
-                        <div class="card-action">
-                            <a href="/approveproject/{{ project.id }}">Approve Project for Bidding</a>
-                        </div>
-                        <div class="card-action">
-                            <a href="/rejectproject/{{ project.id }}">Reject Project</a>
+                        <div class="card-action options">
+                            <div class="action-left">
+                                <a href="/approveproject/{{ project.id }}">Approve</a>
+                            </div>
+                            <div class="action-right">
+                                <a href="/rejectproject/{{ project.id }}">Reject</a>
+                            </div>
                         </div>
                     </div>
                 </li>
@@ -100,7 +105,7 @@
 
     <!-- Or present a list of sections to join -->
     <div class="col s4">
-        <h4 class="row card-panel blue lighten-4 z-depth-3">Manage Sections</h4>
+        <h5 class="row card-panel blue lighten-4 z-depth-3">Manage Sections</h5>
         <ul class="collection">
             <li class="collection-item">
                 <a href="/managesection/" class="btn">Manage Sections</a>

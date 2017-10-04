@@ -5,7 +5,7 @@
 <div class="row">
     <!-- Allow to register a new section if an instructor -->
     <form class="col s4" action="/managesection/" method="post">
-        <h4 class="row card-panel blue lighten-4 z-depth-3">Create a New Section</h4>
+        <h5 class="row card-panel blue lighten-4 z-depth-3">Create a New Section</h5>
         {% csrf_token %}
         <div class="row">
             <div class="input-field col s12">
@@ -22,7 +22,7 @@
 
     <!-- Show list of sections -->
     <div class="col s4">
-        <h4 class="row card-panel blue lighten-4 z-depth-3">Edit an Existing Section</h4>
+        <h5 class="row card-panel blue lighten-4 z-depth-3">Edit an Existing Section</h5>
         <ul class="collection">
             {% for section in sections %}
                 <li class="collection-item">
