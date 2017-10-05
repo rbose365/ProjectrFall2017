@@ -10,14 +10,14 @@
             <h5 class="row card-panel blue lighten-4 z-depth-3">Join a Section</h5>
             <ul class="collection">
                 {% for section in sections %}
-                    {% if user.profile.section_id != section.id %}
+                    {% if user.profile.section.id != section.id %}
                         <li class="collection-item">
                             <a href="/joinsection/{{ section.id }}" class="btn">{{ section.name }}</a>
                         </li>
                     {% endif %}
                 {% endfor %}
             </ul>
-            {% if user.profile.section_id != None %}
+            {% if user.profile.section.id != None %}
                 <a href="/student/" class="btn">Cancel</a>
             {% endif %}
         </div>

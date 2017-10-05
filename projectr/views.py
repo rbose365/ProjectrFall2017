@@ -88,13 +88,10 @@ def register(request):
                 return render(request, "register.html", { "form": form })
 
             try: # Try and create the new user object
-                new_user = User.objects.create_user(email,
-                                                    email=email,
-                                                    password=password)
+                new_user = User.objects.create_user(email, email=email, password=password)
                 new_user.profile.user_type = user_type
                 if user_type == 'I':
                     currKey.delete()
-
                 new_user.save() # save the new user to the database
             except IntegrityError:
                 # Duplicate email: notify the user and bail on registering
@@ -257,7 +254,11 @@ def project_view(request, project_id):
             description = form.cleaned_data["description"]
             section = Section.objects.get(students__id=request.user.id)
 
-            new_bid = Bid(team_members=team_members, description=description, project=proj, is_approved=False, student=request.user)
+            new_bid = Bid(team_members=team_members
+                        , description = description
+                        , project = proj
+                        , is_approved = False
+                        , student = request.user)
             new_bid.save()
 
             bid_success = True # TODO notify the user on the UI that the bid was submitted
@@ -310,8 +311,8 @@ def join_a_section(request, section_id):
     # Join section
     if section_id != "":
         # If User already belongs to a section, remove them from the original
-        if request.user.profile.section_id != None:
-            old_section = Section.objects.get(id=int(request.user.profile.section_id))
+        if request.user.profile.section != None:
+            old_section = Section.objects.get(id=int(request.user.profile.section.id))
             if request.user.profile.user_type == 'S':
                 old_section.students.remove(request.user.id)
             else:
@@ -319,7 +320,7 @@ def join_a_section(request, section_id):
         section = Section.objects.get(id=int(section_id))
         if request.user.profile.user_type == 'S':
             section.students.add(request.user)
-            request.user.profile.section_id = section_id
+            request.user.profile.section = section
             request.user.profile.save()
         else:
             assert False, "Invalid user type"

@@ -6,34 +6,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 import random, string
 
-# =======================================================================================================
-class Profile(models.Model):
-    """
-    An extension of the built-in Django user model to allow for the different
-    types of users
-    """
-    USER_TYPES = (
-        ('S', 'Student'),
-        ('I', 'Instructor'),
-        ('C', 'Client')
-    )
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    user_type = models.CharField(max_length=1, choices=USER_TYPES)
-    section_id = models.IntegerField(null=True)
-
-# These methods are for linking the Profile model with Django built-in User model for authentication
-# Reference: https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
-# ========================================================================================================
-
-
 class Project(models.Model):
     """
     A model object representing a client-submitted project.
@@ -63,7 +35,35 @@ class Section(models.Model):
     the students bids
     """
     name = models.CharField(max_length=255)
-    students = models.ManyToManyField(User, related_name="students_for_section")
+    students = models.ManyToManyField(User, related_name="students")
+
+    # =======================================================================================================
+class Profile(models.Model):
+    """
+    An extension of the built-in Django user model to allow for the different
+    types of users
+    """
+    USER_TYPES = (
+        ('S', 'Student'),
+        ('I', 'Instructor'),
+        ('C', 'Client')
+    )
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user_type = models.CharField(max_length=1, choices=USER_TYPES)
+    section = models.ForeignKey(Section, blank=True, null=True)
+
+# These methods are for linking the Profile model with Django built-in User model for authentication
+# Reference: https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    if instance.is_staff != 1:
+        instance.profile.save()
+# ========================================================================================================
 
 class Message(models.Model):
     """
@@ -86,7 +86,6 @@ class Bid(models.Model):
     is_approved = models.BooleanField()
     project = models.ForeignKey(Project, on_delete=models.CASCADE) # For (Bid <-> Project) ; many to one
     student = models.ForeignKey(User, on_delete=models.CASCADE)
-    instructors = models.ManyToManyField(User, related_name="instructors_for_bid")
 
 
 class Notification(models.Model):
