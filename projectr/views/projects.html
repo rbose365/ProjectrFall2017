@@ -19,21 +19,43 @@
     </div>
 
     <div class="row">
-      <ul class="collapsible popout col s12" data-collapsible="accordion" id="list-test">
-          {% for project in projects %}
-          <li>
-            <div class="collapsible-header"> {{ project.name }}</div>
-            <div class="collapsible-body white">
-              <p> {{ project.description }}</p>
-              <div class="row">
-                <div class="col s7 offset-s1">
-                    <a href="/project/{{ project.id }}" class="waves-effect eaves-light btn col s4">View More</a>
+        <ul class="collapsible popout col s12" data-collapsible="accordion" id="list-test">
+            <div class="row card-title blue lighten-4 z-depth-3" style="font-size:16px">
+                <div class="col s2" style="text-align:center">
+                Your Bids
                 </div>
-              </div>
+                <div class="col s10">
+                Project Name
+                </div>
             </div>
-          </li>
-          {% endfor %}
-      </ul>
+            {% for project in projects %}
+            <li>
+                <div class="collapsible-header">
+                    <div class="col s2">
+                        {% if project.id in projects_bid_on %}
+                            <i class="tiny material-icons">gavel</i>
+                        {% endif %}
+                    </div>
+                    <div class="col s10 pull-s1">
+                    {{ project.name }}
+                    </div>
+                </div>
+                <div class="collapsible-body white">
+                    <p>
+                    {% if project.id in projects_bid_on %}
+                        You have already bid on this project<br>
+                    {% endif %}
+                    {{ project.description }}
+                    </p>
+                    <div class="row">
+                        <div class="col s7 offset-s1">
+                            <a href="/project/{{ project.id }}" class="waves-effect eaves-light btn col s4">View More</a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
     </div>
 
     <div class="row">

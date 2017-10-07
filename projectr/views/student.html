@@ -10,9 +10,16 @@
                 <li class="collection-item">
                     <div class="card blue-grey darken-1">
                         <div class="card-content avatar white-text">
-                            <i class="material-icons">error</i>
-                            <span class="card-title">{{ notification.subject }}</span>
-                            <p> {{ notification.text }} </p>
+                            <div class="col s11">
+                                <i class="material-icons">error</i>
+                                <span class="card-title">{{ notification.subject }}</span>
+                                <p>{{ notification.text }} </p>
+                            </div>
+                            <div class="col s1" style="float:right">
+                                <a href="/deletenotification/{{ notification.id }}" style="color:inherit">
+                                    <i class="small material-icons">clear</i>
+                                </a>
+                            </div>
                         </div>
                     </div>
             {% endfor %}
@@ -47,15 +54,17 @@
         <ul class="collection with-header z-depth-3">
             <li class="collection-header blue lighten-4"><h5>Projects</h5></li>
             {% for project in projects %}
-                <li class="collection-item">
-                    <div class="card blue-grey darken-1">
-                        <div class="card-content avatar white-text">
-                            <i class="material-icons">assignment</i>
-                            <span class="card-title">{{ project.name }}</span>
-                            <p> {{ project.description }} </p>
+                {% if project.is_approved and not project.is_assigned %}
+                    <li class="collection-item">
+                        <div class="card blue-grey darken-1">
+                            <div class="card-content avatar white-text">
+                                <i class="material-icons">assignment</i>
+                                <span class="card-title">{{ project.name }}</span>
+                                <p> {{ project.description }} </p>
+                            </div>
                         </div>
-                    </div>
-                </li>
+                    </li>
+                {% endif %}
             {% endfor %}
         </ul>
         <a href="/projects/"><button class="btn waves-effect waves-light">View All Projects</button></a>

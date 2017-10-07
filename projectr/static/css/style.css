@@ -33,6 +33,9 @@ footer.page-footer {
   bottom: 0;
   left: 0;
 }
+.card-content {
+    display: inline-block;
+}
 
 /*Headers for profile*/
 .one-line-list {
@@ -60,7 +63,6 @@ footer.page-footer {
     width: 50%;
     text-align: center;
     border-top: 1px solid rgba(160, 160, 160, 0.2);
-    border-right: 1px solid rgba(160, 160, 160, 0.2);
 }
 .action-right {
     float: right;
@@ -70,5 +72,10 @@ footer.page-footer {
     width: 50%;
     text-align: center;
     border-top: 1px solid rgba(160, 160, 160, 0.2);
+}
+.border-right {
+    border-right: 1px solid rgba(160, 160, 160, 0.2);
+}
+.border-left {
     border-left: 1px solid rgba(160, 160, 160, 0.2);
 }

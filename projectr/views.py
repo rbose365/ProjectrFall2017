@@ -234,8 +234,14 @@ def projects(request):
     Renders the view of the projects page (where users can browse a list of all projects in the system
     """
     # Read in all projects from the database
-    projects = Project.objects.filter(is_approved=True) # only get projects instructors have approved
-    return render(request, "projects.html", { "projects": projects })
+    projects = Project.objects.filter(is_approved=True).filter(is_assigned=False)
+    projects_bid_on = request.user.profile.bids.filter(project__in=projects).values_list('project', flat=True)
+    
+    context = {
+            "projects": projects,
+            "projects_bid_on": projects_bid_on
+    }
+    return render(request, "projects.html", context)
 
 
 @login_required
@@ -260,6 +266,7 @@ def project_view(request, project_id):
                         , is_approved = False
                         , student = request.user)
             new_bid.save()
+            request.user.profile.bids.add(new_bid)
 
             bid_success = True # TODO notify the user on the UI that the bid was submitted
 
@@ -268,6 +275,7 @@ def project_view(request, project_id):
                                                   If the bid is awarded, you will receive \
                                                   another notification here.".format(team_members))
             new_notification.save()
+    bid_on = request.user.profile.bids.filter(project=proj).exists()
     form = BidSubmissionForm()
     questions = Question.objects.filter(project__id=proj.id)
     question_form = QuestionForm()
@@ -276,7 +284,8 @@ def project_view(request, project_id):
             "form": form,
             "bid_success": bid_success, # For showing a message that the bid was successfully saved
             "question_form": question_form,
-            "questions": questions
+            "questions": questions,
+            "bid_on": bid_on
     }
     return render(request, "project.html", context)
 

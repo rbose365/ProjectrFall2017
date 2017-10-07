@@ -14,7 +14,10 @@ def award_bid(request, bid_id):
                                     text="Your bid on the project {} was awarded by your instructor(s)!" \
                                          "This will be your project.  Contact your client at {}".format(bid.project.name, bid.project.client.email))
     new_notification.save()
-    bid.delete()
+    bid.project.is_assigned = True
+    bid.student.profile.bids.all().delete()
+    Bid.objects.filter(project=bid.project).delete()
+    bid.project.save()
     return redirect_user_to_homepage(request.user.profile.user_type)
 
 
@@ -82,6 +85,14 @@ def delete_a_section(request, section_id):
                 sections.get(id=int(section_id)).delete()
 
     return HttpResponseRedirect("/managesection/")
+    
+@login_required
+def delete_a_notification(request, notification_id):
+    """
+    Deletes a notification
+    """
+    Notification.objects.get(id=notification_id).delete()
+    return redirect_user_to_homepage(request.user.profile.user_type)
 
 @login_required
 def add_tag(request):

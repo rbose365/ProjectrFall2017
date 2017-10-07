@@ -15,7 +15,8 @@ class Project(models.Model):
     keywords = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
     client = models.ForeignKey(User, on_delete=models.CASCADE)
-    is_approved = models.BooleanField() # defaults to false
+    is_approved = models.BooleanField(default=False) # defaults to false
+    is_assigned = models.BooleanField(default=False)
 
 
 class Question(models.Model):
@@ -37,6 +38,18 @@ class Section(models.Model):
     name = models.CharField(max_length=255)
     students = models.ManyToManyField(User, related_name="students")
 
+class Bid(models.Model):
+    """
+    Represents a bid.
+    The bid is only associated with the submitter of the bid, rather than every person in a group, so
+    the accept/reject notification will only show up to the submitter (i.e the "leader" of the group)
+    """
+    team_members = models.CharField(max_length=255)
+    description = models.CharField(max_length=255)
+    is_approved = models.BooleanField()
+    project = models.ForeignKey(Project, on_delete=models.CASCADE) # For (Bid <-> Project) ; many to one
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
+
     # =======================================================================================================
 class Profile(models.Model):
     """
@@ -51,6 +64,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     user_type = models.CharField(max_length=1, choices=USER_TYPES)
     section = models.ForeignKey(Section, blank=True, null=True)
+    bids = models.ManyToManyField(Bid)
 
 # These methods are for linking the Profile model with Django built-in User model for authentication
 # Reference: https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html
@@ -73,19 +87,6 @@ class Message(models.Model):
     recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name="recipient")
     subject = models.CharField(max_length=255)
     text = models.TextField()
-
-
-class Bid(models.Model):
-    """
-    Represents a bid.
-    The bid is only associated with the submitter of the bid, rather than every person in a group, so
-    the accept/reject notification will only show up to the submitter (i.e the "leader" of the group)
-    """
-    team_members = models.CharField(max_length=255)
-    description = models.CharField(max_length=255)
-    is_approved = models.BooleanField()
-    project = models.ForeignKey(Project, on_delete=models.CASCADE) # For (Bid <-> Project) ; many to one
-    student = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
 class Notification(models.Model):
