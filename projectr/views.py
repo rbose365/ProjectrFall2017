@@ -5,7 +5,9 @@ from django.db import IntegrityError
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from forms import LoginForm, RegisterForm, ProjectSubmissionForm, MessageForm, \
-        BidSubmissionForm, NewSectionForm, QuestionForm, ReplyForm, ProfileForm
+        BidSubmissionForm, NewSectionForm, QuestionForm, ReplyForm, ProfileForm, \
+        SearchForm
+from django.db.models import Q
 from models import Project, Message, Bid, Section, Notification, Question, InstructorKey, Tag
 from views_utils import redirect_user_to_homepage, create_introduction_notification
 from django.contrib import messages
@@ -233,11 +235,29 @@ def projects(request):
     """
     Renders the view of the projects page (where users can browse a list of all projects in the system
     """
-    # Read in all projects from the database
     projects = Project.objects.filter(is_approved=True).filter(is_assigned=False)
     projects_bid_on = request.user.profile.bids.filter(project__in=projects).values_list('project', flat=True)
-    
+    if request.method == "POST":
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            try:
+                searchTerms = form.cleaned_data["query"].split()
+                query = Q()
+                for searchTerm in searchTerms:
+                    query |= Q(name__icontains=searchTerm)
+                    query |= Q(description__icontains=searchTerm)
+                    query |= Q(keywords__icontains=searchTerm)
+                    query |= Q(requirements__icontains=searchTerm)
+                projects = Project.objects.filter(is_approved=True).filter(is_assigned=False).filter(query).all()
+            except KeyError:
+                pass
+        else:
+            # TODO indicate some kind of failure
+            pass
+    else:
+        form = SearchForm()
     context = {
+            "form": form,
             "projects": projects,
             "projects_bid_on": projects_bid_on
     }

@@ -38,6 +38,7 @@ urlpatterns = [
     url(r'^managesection/', views.manage_sections),
     url(r'^editsection/(?P<section_id>\d+)/$', views.edit_a_section),
     url(r'^sendmessage/', views.send_message),
+    url(r'^search/', views.projects),
     url(r'^bids/',views.bids)
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

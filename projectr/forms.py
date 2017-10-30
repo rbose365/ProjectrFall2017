@@ -50,3 +50,6 @@ class ReplyForm(forms.Form):
 
 class ProfileForm(forms.Form):
     tags = forms.CharField(widget=forms.TextInput, label="Tags")
+    
+class SearchForm(forms.Form):
+    query = forms.CharField(widget=forms.TextInput, label="Query")

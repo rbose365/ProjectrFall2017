@@ -9,13 +9,16 @@
     </div>
 
     <div class="row">
-        <div class="col s8 offset-s2">
-          <div class="input-field col s12">
-            <input id="search_text" type="text">
-            <label for="search_text">Search</label>
-          </div>
-          <div class="right-align"><a class="waves-effect eaves-light btn" onclick="Materialize.showStaggeredList('#list-test')">Search</a></div>
-        </div>
+        <form class="col s8 offset-s2" action="/search/" method="post">
+            {% csrf_token %}
+            <div class="input-field col s12">
+                {{ form.query }}
+                <label for="{{ form.query.id_for_label }}">Search</label>
+            </div>
+            <div class="right-align">
+                <button class="btn waves-effect waves-light" type="submit">Search</button>
+            </div>
+        </form>
     </div>
 
     <div class="row">
