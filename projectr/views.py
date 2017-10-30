@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from forms import LoginForm, RegisterForm, ProjectSubmissionForm, MessageForm, \
         BidSubmissionForm, NewSectionForm, QuestionForm, ReplyForm, ProfileForm, \
-        SearchForm
+        SearchForm, FilteredSearchForm
 from django.db.models import Q
 from models import Project, Message, Bid, Section, Notification, Question, InstructorKey, Tag
 from views_utils import redirect_user_to_homepage, create_introduction_notification
@@ -239,18 +239,17 @@ def projects(request):
     projects_bid_on = request.user.profile.bids.filter(project__in=projects).values_list('project', flat=True)
     if request.method == "POST":
         form = SearchForm(request.POST)
-        if form.is_valid():
-            try:
-                searchTerms = form.cleaned_data["query"].split()
-                query = Q()
-                for searchTerm in searchTerms:
-                    query |= Q(name__icontains=searchTerm)
-                    query |= Q(description__icontains=searchTerm)
-                    query |= Q(keywords__icontains=searchTerm)
-                    query |= Q(requirements__icontains=searchTerm)
-                projects = Project.objects.filter(is_approved=True).filter(is_assigned=False).filter(query).all()
-            except KeyError:
-                pass
+        try:
+            searchTerms = form.cleaned_data["query"].split()
+            query = Q()
+            for searchTerm in searchTerms:
+                query |= Q(name__icontains=searchTerm)
+                query |= Q(description__icontains=searchTerm)
+                query |= Q(keywords__icontains=searchTerm)
+                query |= Q(requirements__icontains=searchTerm)
+            projects = Project.objects.filter(is_approved=True).filter(is_assigned=False).filter(query).all()
+        except KeyError:
+            pass
         else:
             # TODO indicate some kind of failure
             pass
@@ -315,8 +314,29 @@ def bids(request):
     """
     # Read in all bids from the database
     bids = Bid.objects.all() 
-    bid_count = bids.count();
+    bid_count = bids.count()
+    sections = Section.objects.all()
+    if request.method == "POST":
+        form = FilteredSearchForm(request.POST)
+        try:
+            filter = form.data["filter"]
+            searchTerms = form.data["query"].split()
+            query = Q()
+            for searchTerm in searchTerms:
+                query |= Q(description__icontains=searchTerm)
+            bids = Bid.objects.filter(query).all()
+        except KeyError:
+            pass
+        else:
+            # TODO indicate some kind of failure
+            pass
+    else:
+        filter = 'all'
+        form = FilteredSearchForm()
     context = {
+            "form": form,
+            "filter": filter,
+            "sections": sections,
             "bids": bids,
             "bid_count": bid_count
     }

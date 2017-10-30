@@ -9,12 +9,12 @@
     </div>
 
     <div class="row">
-        <form class="col s8 offset-s2" action="/search/" method="post">
+        <form class="col s8 offset-s2" action="/projects/search/" method="post">
             {% csrf_token %}
             <div class="input-field col s12">
                 {{ form.query }}
                 <label for="{{ form.query.id_for_label }}">Search</label>
-            </div>
+            </div>  
             <div class="right-align">
                 <button class="btn waves-effect waves-light" type="submit">Search</button>
             </div>

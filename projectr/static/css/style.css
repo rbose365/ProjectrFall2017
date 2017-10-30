@@ -17,6 +17,14 @@
   min-width: 200px;
 }
 
+.selected, .selected:hover{
+    box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+    background-color: #1d6d65;
+    text-align: center;
+    transition: .2s ease-out;
+    cursor: pointer;
+}
+
 /*Sticky Footer*/
 html {
   height: 100%;

@@ -9,19 +9,30 @@
     </div>
 
     <div class="row">
-        <div class="col s8 offset-s2">
-          <div class="input-field col s12">
-            <input id="search_text" type="text">
-            <label for="search_text">Search</label>
-          </div>
-          <div class="right-align"><a class="waves-effect eaves-light btn" onclick="Materialize.showStaggeredList('#list-test')">Search</a></div>
-        </div>
+        <form class="col s8 offset-s2" name="form" action="/bids/search/" method="post">
+            {% csrf_token %}
+            <div class="input-field col s12">
+                <input for="filter" type="hidden" name="filter" value="all"/>
+                <a href="" onclick="document.form.filter.value='all';return false;" class="btn {% if filter == 'all' %}selected{% endif %}">All</a>
+                {% for section in sections %}
+                    <a href="" onclick="document.form.filter.value='{{ section.name }}';return false;" class="btn {% if filter == section.name %}selected{% endif %}">{{ section.name }}</a>
+                {% endfor %}
+            </div>
+            <div class="input-field col s12">
+                {{ form.query }}
+                <label for="{{ form.query.id_for_label }}">Search</label>
+            </div>
+            <div class="right-align">
+                <button class="btn waves-effect waves-light" type="submit">Search</button>
+            </div>
+        </form>
     </div>
 
     <div class="row">
       <ul class="collapsible popout col s12" data-collapsible="accordion" id="list-test">
           {% for bid in bids %}
-          <li>
+          {% if bid.student.profile.section.name == filter or filter == 'all' %}
+           <li>
             <div class="collapsible-header"> Bid for <span style="font-weight: bold">{{ bid.project.name }}</span> by {{ bid.team_members }}</div>
             <div class="collapsible-body white">
               <p> 
@@ -36,6 +47,7 @@
               </div>
             </div>
           </li>
+          {% endif %}
           {% endfor %}
       </ul>
     </div>

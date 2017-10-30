@@ -52,4 +52,8 @@ class ProfileForm(forms.Form):
     tags = forms.CharField(widget=forms.TextInput, label="Tags")
     
 class SearchForm(forms.Form):
-    query = forms.CharField(widget=forms.TextInput, label="Query")
+    query = forms.CharField(widget=forms.TextInput, label="Query", required=False)
+    
+class FilteredSearchForm(forms.Form):
+    query = forms.CharField(widget=forms.TextInput, label="Query", required=False)
+    filter = forms.CharField(widget=forms.TextInput, label="Filter", required=False)
