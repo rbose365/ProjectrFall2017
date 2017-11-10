@@ -461,6 +461,45 @@ def send_message(request):
             "form": form,
     }
     return render(request, "sendmessage.html", context)
+    
+@login_required
+def submit_project(request, project_id):
+    """
+    Render page where clients can create/edit a project
+    """
+    if request.method == "POST":
+        print("MADE IT 1");
+        form = ProjectSubmissionForm(request.POST)
+        if (project_id != ""):
+            existing_project = Project.objects.get(id=int(project_id))
+            existing_project.name = form.data["name"]
+            existing_project.requirements = form.data["requirements"]
+            existing_project.keywords = form.data["keywords"]
+            existing_project.description = form.data["description"]
+            existing_project.save()
+        else:
+            print("MADE IT 2");
+            name = form.data["name"]
+            requirements = form.data["requirements"]
+            keywords = form.data["keywords"]
+            description = form.data["description"]
+
+            new_project = Project(name=name,
+                                  requirements=requirements,
+                                  keywords=keywords,
+                                  description=description,
+                                  client=request.user,
+                                  is_approved=False)
+
+            new_project.save()
+        return HttpResponseRedirect("/client/")
+        
+    form = ProjectSubmissionForm()
+    context = {
+            "form": form,
+            "project_id": project_id
+    }
+    return render(request, "submitproject.html", context)
 
 @login_required
 def profile(request):

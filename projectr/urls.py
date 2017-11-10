@@ -40,7 +40,8 @@ urlpatterns = [
     url(r'^sendmessage/', views.send_message),
     url(r'^projects/search/', views.projects),
     url(r'^bids/search/', views.bids),
-    url(r'^bids/',views.bids)
+    url(r'^bids/',views.bids),
+    url(r'^submitproject/(\d*)',views.submit_project)
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 # api endpoints
