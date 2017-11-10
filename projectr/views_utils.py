@@ -13,4 +13,4 @@ def redirect_user_to_homepage(user_type):
     elif user_type == 'C':
         return HttpResponseRedirect("/client/")
     else:
-        assert False, "Invalid user type for user"
+        raise ValueError("Incorrect User Type")

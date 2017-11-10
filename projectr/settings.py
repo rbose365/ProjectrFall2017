@@ -81,7 +81,10 @@ DATABASES = {
         'USER': 'projectruser',
         'PASSWORD': 'teamdu97',
         'HOST': 'localhost',
-        'PORT': ''
+        'PORT': '',
+        'TEST': {
+            'NAME': 'test_projectr',
+        },
     }
 }
 

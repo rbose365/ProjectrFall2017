@@ -59,9 +59,13 @@ Refer to your package manager's documentation for the names of these packages.
 
 
 ### Dependent Libraries
-The only library requirement is to install Django from pip.
+Install Django from pip.
 
 ```$ pip install Django```
+
+and mock only if testing
+
+```$ pip install mock```
 
 
 ### Download Instructions
@@ -108,10 +112,34 @@ First create the database.
 
 ```$ python manage.py migrate```
 
+4. Log in as root
+
+```$ mysql -u root```
+
+5. Update Permission
+
+```$ UPDATE mysql.user SET Grant_priv='Y', Super_priv='Y' WHERE User='projectruser';```
+
+6. Flush Privileges
+
+```$ FLUSH PRIVILEGES;```
+
+7. Grant Permissions and exit
+
+```$ GRANT ALL ON *.* TO 'projectruser'@'localhost';```
+
+```$ exit```
+
 #### Running the Server
 Once the database is generated, the application can be ran with the following command
 
 ```$ python manage.py runserver```
+
+#### Testing 
+
+Run all tests with:
+
+```$ python manage.py test```
 
 ### Troubleshooting
 * During development, if Django database migrations are causing problems (error messages, etc.), the easiest fix is to just force it to re-create the entire development database
