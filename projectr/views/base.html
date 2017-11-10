@@ -17,6 +17,9 @@
     </head>
     <body>
 		<ul id="profiledropdown" class="dropdown-content">
+            {% if user.profile.user_type == 'I' %}
+            <li><a href="/managesection/">Manage Sections</a></li>
+            {% endif %}
             {% if user.profile.user_type == 'S' %}
             <li><a href="/profile/">Edit Profile</a></li>
 			<li><a href="/joinsection/">Change Section</a></li>

@@ -9,7 +9,7 @@ from forms import LoginForm, RegisterForm, ProjectSubmissionForm, MessageForm, \
         SearchForm, FilteredSearchForm
 from django.db.models import Q
 from models import Project, Message, Bid, Section, Notification, Question, InstructorKey, Tag
-from views_utils import redirect_user_to_homepage, create_introduction_notification
+from views_utils import redirect_user_to_homepage
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
@@ -103,8 +103,8 @@ def register(request):
             user = authenticate(username=email, password=password)
             login(request, user)
 
-            # Create an introduction notification to display to the new user
-            create_introduction_notification(user)
+            welcome_notification = Notification(recipient=user, subject="Welcome to Projectr", text="")
+            welcome_notification.save()
 
             if user_type == 'S':
                 # Allow instructors to join/create a section, students to join a section
@@ -125,17 +125,21 @@ def instructor(request):
     Get all the information from the database to display an instructor's homepage (messages, notifications, bids etc.)
     and then render the page
     """
-    personalMessages = Message.objects.filter(recipient__id=request.user.id)
+    messages = Message.objects.filter(recipient__id=request.user.id)
     bids = Bid.objects.all()
     notifications = Notification.objects.filter(recipient__id=request.user.id)
     projs_to_approve = Project.objects.filter(is_approved=False)
     sections = Section.objects.all()
 
     context = {
-        "notifications": notifications,
-        "inbox": personalMessages,
-        "bids": bids,
-        "projects_to_approve": projs_to_approve
+        "notifications": notifications.order_by('-id')[:1],
+        "notifications_count": notifications.count,
+        "messages": messages.order_by('-id')[:],
+        "messages_count": messages.count,
+        "bids": bids.order_by('-id')[:1],
+        "bids_count": bids.count,
+        "projects_to_approve": projs_to_approve.order_by('-id')[:1],
+        "projects_count": projs_to_approve.count
     }
 
     return render(request, "instructor.html", context)
@@ -170,17 +174,21 @@ def client(request):
             return render(request, "client.html", { "invalid": True, "form": blank_form })
     form = ProjectSubmissionForm()
     reply_form = ReplyForm()
-    bids = Bid.objects.filter(project__client__id=request.user.id)
-    projects = Project.objects.filter(client_id=request.user.id)
-    questions = Question.objects.filter(project__client__id=request.user.id)
-    notifications = Notification.objects.filter(recipient__id=request.user.id)
+    bids = Bid.objects.filter(project__client__id=request.user.id).order_by('-id')
+    projects = Project.objects.filter(client_id=request.user.id).order_by('-id')
+    questions = Question.objects.filter(project__client__id=request.user.id).order_by('-id')
+    notifications = Notification.objects.filter(recipient__id=request.user.id).order_by('-id')
     context = {
-            "bids": bids,
-            "form": form,
-            "projects": projects,
-            "questions": questions,
+            "bids": bids.order_by('-id')[:4],
+            "bids_count": bids.count,
+            "projects": projects.order_by('-id')[:],
+            "projects_count": projects.count,
+            "questions": questions.order_by('-id')[:],
+            "questions_count": questions.count,
+            "notifications": notifications.order_by('-id')[:1],
+            "notifications_count": notifications.count,
             "reply_form": reply_form,
-            "notifications": notifications
+            "form": form
     }
     return render(request, "client.html", context)
 
@@ -218,15 +226,18 @@ def student(request):
             # TODO indicate some kind of failure
             pass
 
-    projects = Project.objects.filter(is_approved=True)[:5] # This is efficient according to docs, although it doesn't look that way
-    personalMessages = Message.objects.filter(recipient__id=request.user.id)
-    notifications = reversed(Notification.objects.filter(recipient__id=request.user.id))
+    projects = Project.objects.filter(is_approved=True)
+    messages = Message.objects.filter(recipient__id=request.user.id)
+    notifications = Notification.objects.filter(recipient__id=request.user.id)
     form = MessageForm()
     context = {
-            "projects": projects,
-            "inbox": personalMessages,
-            "form": form,
-            "notifications": notifications
+            "projects": projects.order_by('-id')[:2],
+            "projects_count": projects.count,
+            "messages": messages.order_by('-id')[:],
+            "messages_count": messages.count,
+            "notifications": notifications.order_by('-id')[:1],
+            "notifications_count": notifications.count,
+            "form": form
     }
     return render(request, "student.html", context)
 
@@ -257,7 +268,7 @@ def projects(request):
         form = SearchForm()
     context = {
             "form": form,
-            "projects": projects,
+            "projects": projects.order_by('-id'),
             "projects_bid_on": projects_bid_on
     }
     return render(request, "projects.html", context)
@@ -289,10 +300,10 @@ def project_view(request, project_id):
 
             bid_success = True # TODO notify the user on the UI that the bid was submitted
 
-            new_notification = Notification(recipient=request.user, subject="Bid on \"{}\" submitted.".format(proj.name),
-                                            text="You submitted a bid with team members {}.  \
-                                                  If the bid is awarded, you will receive \
-                                                  another notification here.".format(team_members))
+            new_notification = Notification(recipient=request.user, subject="Bid Submitted",
+                                            text="You submitted a bid on '{}' with team members {}.\
+                                                  If the bid is awarded, you will be \
+                                                  notified here.".format(proj.name, team_members))
             new_notification.save()
     bid_on = request.user.profile.bids.filter(project=proj).exists()
     form = BidSubmissionForm()
@@ -337,7 +348,7 @@ def bids(request):
             "form": form,
             "filter": filter,
             "sections": sections,
-            "bids": bids,
+            "bids": bids.order_by('-id'),
             "bid_count": bid_count
     }
     return render(request, "bids.html", context)

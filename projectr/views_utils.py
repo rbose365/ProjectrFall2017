@@ -14,12 +14,3 @@ def redirect_user_to_homepage(user_type):
         return HttpResponseRedirect("/client/")
     else:
         assert False, "Invalid user type for user"
-
-
-def create_introduction_notification(user):
-    """
-    """
-    subject = "Welcome to Groupr"
-    body = "Anything is possible at Groupr. The infinite is possible at Groupr. The unattainable is unknown at Groupr. This Groupr. This is Groupr."
-    new_notif = Notification(recipient=user, subject=subject, text=body)
-    new_notif.save()
