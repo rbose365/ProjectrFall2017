@@ -5,7 +5,7 @@ import mock
 
 class TestLogin(TestCase):
 
-	def test_login_student(self):
+	def test_login_student_authenticated(self):
 
 		# Create a mock user
 		mockUser = mock.Mock()
@@ -19,7 +19,7 @@ class TestLogin(TestCase):
 
 		assert "student" in str(views.login_view(mockReq)['Location'])
 
-	def test_login_teacher(self):
+	def test_login_teacher_authenticated(self):
 
 		# Create a mock user
 		mockUser = mock.Mock()
@@ -33,7 +33,7 @@ class TestLogin(TestCase):
 
 		assert "instructor" in str(views.login_view(mockReq)['Location'])
 
-	def test_login_client(self):
+	def test_login_client_authenticated(self):
 
 		# Create a mock user
 		mockUser = mock.Mock()
