@@ -251,7 +251,7 @@ def projects(request):
     if request.method == "POST":
         form = SearchForm(request.POST)
         try:
-            searchTerms = form.cleaned_data["query"].split()
+            searchTerms = form.data["query"].split()
             query = Q()
             for searchTerm in searchTerms:
                 query |= Q(name__icontains=searchTerm)
