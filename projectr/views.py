@@ -318,6 +318,31 @@ def project_view(request, project_id):
             "bid_on": bid_on
     }
     return render(request, "project.html", context)
+    
+def notifications(request):
+    """
+    Renders the view of the notifications page, where users can browse a list of their notifcations in the system
+    """
+    # Read in all bids from the database
+    bids = Bid.objects.all() 
+    bid_count = bids.count()
+    sections = Section.objects.all()
+    notifications = Notification.objects.filter(recipient__id=request.user.id)
+    context = {
+            "notifications": notifications
+    }
+    return render(request, "notifications.html", context)
+    
+def pendingprojects(request):
+    """
+    Renders the view of the pending projects page, where users can browse a list of their pending projects in the system
+    """
+    # Read in all pending projects from the database
+    projects_to_approve = Project.objects.filter(is_approved=False)
+    context = {
+            "projects_to_approve": projects_to_approve
+    }
+    return render(request, "pendingprojects.html", context)
 
 def bids(request):
     """
@@ -354,12 +379,12 @@ def bids(request):
     return render(request, "bids.html", context)
 
 @login_required
-def messages_internal(request):
+def messages(request):
     """
     Render the inbox of the user sending the request
     """
-    messages_internal = Message.objects.filter(recipient__id=request.user.id)
-    return render(request, "messages.html", { "messages": messages_internal })
+    messages = Message.objects.filter(recipient__id=request.user.id)
+    return render(request, "messages.html", { "messages": messages })
 
 
 @login_required

@@ -18,7 +18,7 @@ def award_bid(request, bid_id):
     bid.student.profile.bids.all().delete()
     Bid.objects.filter(project=bid.project).delete()
     bid.project.save()
-    return redirect_user_to_homepage(request.user.profile.user_type)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required
@@ -29,7 +29,7 @@ def reject_bid(request, bid_id):
                                          " Please browse and continue submitting more bids.".format(bid.project.name))
     new_notification.save()
     bid.delete()
-    return redirect_user_to_homepage(request.user.profile.user_type)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required
@@ -37,7 +37,7 @@ def approve_project(request, project_id):
     proj = Project.objects.get(id=int(project_id))
     proj.is_approved = True
     proj.save()
-    return redirect_user_to_homepage(request.user.profile.user_type)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required
@@ -48,7 +48,7 @@ def reject_project(request, project_id):
                                           " scope of the course and has decided not to allow students to bid on it.".format(proj.name))
     new_notification.save()
     proj.delete()
-    return redirect_user_to_homepage(request.user.profile.user_type)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required
@@ -61,7 +61,7 @@ def ask_question(request, project_id):
                                 asker=request.user,
                                 reply="")
         new_question.save()
-    return HttpResponseRedirect("/project/{}".format(project_id))
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required
@@ -71,7 +71,7 @@ def reply_to_question(request, question_id):
     if form.is_valid():
         question.reply = form.cleaned_data["text"]
         question.save()
-    return redirect_user_to_homepage(request.user.profile.user_type)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 @login_required
 def delete_a_section(request, section_id):
@@ -84,7 +84,7 @@ def delete_a_section(request, section_id):
             if sections.get(id=int(section_id)).students.count() == 0:
                 sections.get(id=int(section_id)).delete()
 
-    return HttpResponseRedirect("/managesection/")
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     
 @login_required
 def delete_a_notification(request, notification_id):
@@ -92,7 +92,7 @@ def delete_a_notification(request, notification_id):
     Deletes a notification
     """
     Notification.objects.get(id=notification_id).delete()
-    return redirect_user_to_homepage(request.user.profile.user_type)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 @login_required
 def add_tag(request):
@@ -118,4 +118,4 @@ def add_tag(request):
             return redirect_user_to_homepage(request.user.profile.user_type)
         else:
             # The form data was bad, display an error
-            return HttpResponseRedirect("/profile/")
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

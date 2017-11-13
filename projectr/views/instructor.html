@@ -26,7 +26,7 @@
                     </div>
             {% endfor %}
         </ul>
-        <a href="#"><button class="btn waves-effect waves-light">View All {{ notifications_count }} Notifications</button></a>
+        <a href="/notifications/"><button class="btn waves-effect waves-light">View All {{ notifications_count }} Notifications</button></a>
     </div>
     
     <!-- Projects submitted by clients that have yet to be approved -->
@@ -39,7 +39,7 @@
                         <div class="card-content avatar white-text">
                             <i class="material-icons">assignment</i>
                             <span class="card-title">{{ project.name }}</span>
-                            <p><b>Client:</b> {{ project.client.name }}</p>
+                            <p><b>Client:</b> {{ project.client }}</p>
                             <p><b>Project Description:</b> {{ project.description }}</p>
                         </div>
                         <div class="card-action options">
@@ -54,7 +54,7 @@
                 </li>
             {% endfor %}
         </ul>
-        <a href="#"><button class="btn waves-effect waves-light">View All {{ projects_count }} Projects</button></a>
+        <a href="/pendingprojects/"><button class="btn waves-effect waves-light">View All {{ projects_count }} Projects</button></a>
     </div>
     
     <!-- Outstanding bids from students go here -->

@@ -43,6 +43,7 @@ footer.page-footer {
 }
 .card-content {
     display: inline-block;
+    width: 100%;
 }
 
 /*Headers for profile*/

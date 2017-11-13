@@ -32,15 +32,17 @@ urlpatterns = [
     url(r'^profile/', views.profile),
     url(r'^$', views.index),
     url(r'^projects/', views.projects),
+    url(r'^pendingprojects/', views.pendingprojects),
+    url(r'^messages/', views.messages),
+    url(r'^notifications/', views.notifications),
+    url(r'^bids/',views.bids),
+    url(r'^bids/search/', views.bids),
+    url(r'^projects/search/', views.projects),
     url(r'^project/(\d+)', views.project_view),
-    url(r'^messages/', views.messages_internal),
     url(r'^joinsection/(\d*)', views.join_a_section),
     url(r'^managesection/', views.manage_sections),
     url(r'^editsection/(?P<section_id>\d+)/$', views.edit_a_section),
     url(r'^sendmessage/', views.send_message),
-    url(r'^projects/search/', views.projects),
-    url(r'^bids/search/', views.bids),
-    url(r'^bids/',views.bids),
     url(r'^submitproject/(\d*)',views.submit_project)
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

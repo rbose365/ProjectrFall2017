@@ -12,10 +12,33 @@
         <form class="col s8 offset-s2" name="form" action="/bids/search/" method="post">
             {% csrf_token %}
             <div class="input-field col s12">
+                <p style="color:#9e9e9e">Filter by Section</p>
                 <input for="filter" type="hidden" name="filter" value="all"/>
-                <a href="" onclick="document.form.filter.value='all';return false;" class="btn {% if filter == 'all' %}selected{% endif %}">All</a>
+                <a href="" onclick="try {
+                                        (document.getElementsByClassName('btn selected')[0]).className = 'btn';
+                                        document.form.filter.value='{{ section.name }}';
+                                        this.className = 'btn selected';
+                                    } catch(err) {
+                                        document.form.filter.value='all';
+                                        this.className = 'btn selected';
+                                    }
+                                    return false;" 
+                                    class="btn">
+                                    All
+                </a>
                 {% for section in sections %}
-                    <a href="" onclick="document.form.filter.value='{{ section.name }}';return false;" class="btn {% if filter == section.name %}selected{% endif %}">{{ section.name }}</a>
+                <a href="" onclick="try {
+                                        (document.getElementsByClassName('btn selected')[0]).className = 'btn';
+                                        document.form.filter.value='{{ section.name }}';
+                                        this.className = 'btn selected';
+                                    } catch(err) {
+                                        document.form.filter.value='{{ section.name }}';
+                                        this.className = 'btn selected';
+                                    }
+                                    return false;" 
+                                    class="btn">
+                                    {{ section.name }}
+                </a>
                 {% endfor %}
             </div>
             <div class="input-field col s12">

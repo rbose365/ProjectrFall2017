@@ -25,6 +25,11 @@
 			<li><a href="/joinsection/">Change Section</a></li>
             {% endif %}
 		</ul>
+        {% if user.is_authenticated %}
+        <div style="position:fixed;margin:15px 0 0 5px">
+            <a href="#" onclick="window.history.back()" style="color:#FFFFFF"><i class="small material-icons">arrow_back</i></a>
+        </div>
+        {% endif %}
         <nav class="blue lighten-1" role="navigation">
             <div class="nav-wrapper container">
                 <a id="logo-container" href="/" class="brand-logo">Projectr</a>
