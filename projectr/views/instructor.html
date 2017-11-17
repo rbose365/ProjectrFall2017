@@ -91,13 +91,14 @@
     <div class="col s4">
         <ul class="collection with-header z-depth-3">
             <li class="collection-header blue lighten-4"><h5>Inbox</h5></li>
-            {% for message in inbox %}
+            {% for message in messages %}
                 <li class="collection-item">
                     <div class="card blue-grey darken-1">
                         <div class="card-content avatar white-text">
                             <i class="material-icons">email</i>
                             <span class="card-title">{{ message.subject }}</span>
-                            <p> {{ message.body }} </p>
+                            <p>From: {{ message.sender.email }}</p>
+                            <p> {{ message.text }} </p>
                         </div>
                         <div class="card-action">
                             <a href="#">Reply</a>
@@ -108,6 +109,7 @@
         </ul>
         <a href="/messages/"><button class="btn waves-effect waves-light">View All {{ messages_count }} Messages</button></a>
         <a href="/sendmessage/"><button class="btn waves-effect waves-light">Send Message</button></a>
+
     </div>
     
 </div>

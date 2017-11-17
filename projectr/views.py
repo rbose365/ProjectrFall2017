@@ -134,7 +134,7 @@ def instructor(request):
     context = {
         "notifications": notifications.order_by('-id')[:1],
         "notifications_count": notifications.count,
-        "messages": messages.order_by('-id')[:],
+        "messages": messages.order_by('-id')[:1],
         "messages_count": messages.count,
         "bids": bids.order_by('-id')[:1],
         "bids_count": bids.count,
@@ -152,27 +152,6 @@ def client(request):
     Grabs what is needed for the client: their projects / bids, notifications, and any questions
     on their projects
     """
-    if request.method == "POST":
-        # User submitted a project, add this project to the database
-        form = ProjectSubmissionForm(request.POST)
-        if form.is_valid():
-            name = form.cleaned_data["name"]
-            requirements = form.cleaned_data["requirements"]
-            keywords = form.cleaned_data["keywords"]
-            description = form.cleaned_data["description"]
-
-            new_project = Project(name=name,
-                                  requirements=requirements,
-                                  keywords=keywords,
-                                  description=description,
-                                  client=request.user,
-                                  is_approved=False)
-
-            new_project.save()
-        else:
-            blank_form = LoginForm()
-            return render(request, "client.html", { "invalid": True, "form": blank_form })
-    form = ProjectSubmissionForm()
     reply_form = ReplyForm()
     bids = Bid.objects.filter(project__client__id=request.user.id).order_by('-id')
     projects = Project.objects.filter(client_id=request.user.id).order_by('-id')
@@ -187,8 +166,7 @@ def client(request):
             "questions_count": questions.count,
             "notifications": notifications.order_by('-id')[:1],
             "notifications_count": notifications.count,
-            "reply_form": reply_form,
-            "form": form
+            "reply_form": reply_form
     }
     return render(request, "client.html", context)
 
@@ -204,40 +182,16 @@ def student(request):
     except ObjectDoesNotExist:
         return HttpResponseRedirect("/joinsection/")
 
-    if request.method == "POST":
-        form = MessageForm(request.POST)
-        if form.is_valid():
-            try:
-                sender = request.user
-                recipient = User.objects.get(email=form.cleaned_data["recipient"])
-                subject = form.cleaned_data["subject"]
-                text = form.cleaned_data["text"]
-
-                new_message = Message(sender=sender,
-                                      recipient=recipient,
-                                      subject=subject,
-                                      text=text)
-
-                new_message.save()
-            except KeyError:  #TODO Is this the right error?
-                # TODO indicate that recipient does not exist
-                pass
-        else:
-            # TODO indicate some kind of failure
-            pass
-
     projects = Project.objects.filter(is_approved=True)
     messages = Message.objects.filter(recipient__id=request.user.id)
     notifications = Notification.objects.filter(recipient__id=request.user.id)
-    form = MessageForm()
     context = {
             "projects": projects.order_by('-id')[:2],
             "projects_count": projects.count,
-            "messages": messages.order_by('-id')[:],
+            "messages": messages.order_by('-id')[:1],
             "messages_count": messages.count,
             "notifications": notifications.order_by('-id')[:1],
-            "notifications_count": notifications.count,
-            "form": form
+            "notifications_count": notifications.count
     }
     return render(request, "student.html", context)
 
@@ -250,20 +204,14 @@ def projects(request):
     projects_bid_on = request.user.profile.bids.filter(project__in=projects).values_list('project', flat=True)
     if request.method == "POST":
         form = SearchForm(request.POST)
-        try:
-            searchTerms = form.data["query"].split()
-            query = Q()
-            for searchTerm in searchTerms:
-                query |= Q(name__icontains=searchTerm)
-                query |= Q(description__icontains=searchTerm)
-                query |= Q(keywords__icontains=searchTerm)
-                query |= Q(requirements__icontains=searchTerm)
-            projects = Project.objects.filter(is_approved=True).filter(is_assigned=False).filter(query).all()
-        except KeyError:
-            pass
-        else:
-            # TODO indicate some kind of failure
-            pass
+        searchTerms = form.data["query"].split()
+        query = Q()
+        for searchTerm in searchTerms:
+            query |= Q(name__icontains=searchTerm)
+            query |= Q(description__icontains=searchTerm)
+            query |= Q(keywords__icontains=searchTerm)
+            query |= Q(requirements__icontains=searchTerm)
+        projects = Project.objects.filter(is_approved=True).filter(is_assigned=False).filter(query).all()
     else:
         form = SearchForm()
     context = {
@@ -384,7 +332,36 @@ def messages(request):
     Render the inbox of the user sending the request
     """
     messages = Message.objects.filter(recipient__id=request.user.id)
-    return render(request, "messages.html", { "messages": messages })
+    context = {
+        "messages": messages
+    }
+    return render(request, "messages.html", context)
+    
+@login_required
+def send_message(request):
+    """
+    Render page where students / instructors can go to send a message to other users
+    """
+    if request.method == "POST":
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            sender = request.user
+            recipient = User.objects.get(email=form.cleaned_data["recipient"])
+            subject = form.cleaned_data["subject"]
+            text = form.cleaned_data["text"]
+
+            new_message = Message(sender=sender,
+                                  recipient=recipient,
+                                  subject=subject,
+                                  text=text)
+
+            new_message.save()
+            return redirect_user_to_homepage(request.user.profile.user_type)
+    form = MessageForm()
+    context = {
+            "form": form,
+    }
+    return render(request, "sendmessage.html", context)
 
 
 @login_required
@@ -465,38 +442,6 @@ def edit_a_section(request, section_id):
             "section_id": section_id
     }
     return render(request, "editsection.html", context)
-
-@login_required
-def send_message(request):
-    """
-    Render page where students / instructors can go to send a message to other users
-    """
-    if request.method == "POST":
-        form = MessageForm(request.POST)
-        if form.is_valid():
-            try:
-                sender = request.user
-                recipient = User.objects.get(email=form.cleaned_data["recipient"])
-                subject = form.cleaned_data["subject"]
-                text = form.cleaned_data["text"]
-
-                new_message = Message(sender=sender,
-                                      recipient=recipient,
-                                      subject=subject,
-                                      text=text)
-
-                new_message.save()
-            except KeyError:  #TODO Is this the right error?
-                # TODO indicate that recipient does not exist
-                pass
-        else:
-            # TODO indicate some kind of failure
-            pass
-    form = MessageForm()
-    context = {
-            "form": form,
-    }
-    return render(request, "sendmessage.html", context)
     
 @login_required
 def submit_project(request, project_id):
