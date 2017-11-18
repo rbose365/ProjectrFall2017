@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from views_utils import redirect_user_to_homepage
-from models import Bid, Notification, Project, Question, Section, Tag
+from models import Bid, Notification, Project, Question, Section, Tag, Message
 from forms import QuestionForm, ReplyForm, ProfileForm
 from django.shortcuts import render
 from django.core.exceptions import ObjectDoesNotExist
@@ -92,6 +92,14 @@ def delete_a_notification(request, notification_id):
     Deletes a notification
     """
     Notification.objects.get(id=notification_id).delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    
+@login_required
+def delete_a_message(request, message_id):
+    """
+    Deletes a message
+    """
+    Message.objects.get(id=message_id).delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 @login_required

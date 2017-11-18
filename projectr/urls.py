@@ -56,5 +56,6 @@ urlpatterns += [
     url(r'^addtag/', api_endpoints.add_tag),
     url(r'^deletesection/(\d+)', api_endpoints.delete_a_section),
     url(r'^deletenotification/(\d+)', api_endpoints.delete_a_notification),
+    url(r'^deletemessage/(\d+)', api_endpoints.delete_a_message),
     url(r'^replytoquestion/(\d+)', api_endpoints.reply_to_question)
 ]
