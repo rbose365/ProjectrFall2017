@@ -42,7 +42,7 @@ urlpatterns = [
     url(r'^joinsection/(\d*)', views.join_a_section),
     url(r'^managesection/', views.manage_sections),
     url(r'^editsection/(?P<section_id>\d+)/$', views.edit_a_section),
-    url(r'^sendmessage/', views.send_message),
+    url(r'^sendmessage/(\d*)', views.send_message),
     url(r'^submitproject/(\d*)',views.submit_project)
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

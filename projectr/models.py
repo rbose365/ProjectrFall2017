@@ -87,6 +87,7 @@ class Message(models.Model):
     recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name="recipient")
     subject = models.CharField(max_length=255)
     text = models.TextField()
+    reply_text = models.TextField(default='')
 
 
 class Notification(models.Model):

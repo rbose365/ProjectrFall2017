@@ -338,26 +338,39 @@ def messages(request):
     return render(request, "messages.html", context)
     
 @login_required
-def send_message(request):
+def send_message(request, message_id):
     """
     Render page where students / instructors can go to send a message to other users
     """
+    if (message_id != ''):
+        message = Message.objects.get(id=message_id)
+        form_init = {'recipient': message.sender,'subject': 'RE: ' + message.subject, 'text': message.reply_text}
+    else:
+        form_init = {}
+
     if request.method == "POST":
         form = MessageForm(request.POST)
         if form.is_valid():
             sender = request.user
-            recipient = User.objects.get(email=form.cleaned_data["recipient"])
-            subject = form.cleaned_data["subject"]
-            text = form.cleaned_data["text"]
+            recipient = User.objects.get(email=form.data["recipient"])
+            subject = form.data["subject"]
+            text = form.data["text"].split('\n     >')[0]
+            
+            old_reply_text = message.reply_text if message_id != '' else '';
+            reply_text = '\n\n'
+            reply_lines = ('From: ' + sender.email + '\n' + text + old_reply_text).split('\n')
+            for line in reply_lines:
+                reply_text = reply_text + '     > ' + line + '\n'
 
             new_message = Message(sender=sender,
                                   recipient=recipient,
                                   subject=subject,
-                                  text=text)
+                                  text=text,
+                                  reply_text=reply_text)
 
             new_message.save()
             return redirect_user_to_homepage(request.user.profile.user_type)
-    form = MessageForm()
+    form = MessageForm(initial=form_init)
     context = {
             "form": form,
     }
