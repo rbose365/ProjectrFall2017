@@ -461,11 +461,19 @@ def submit_project(request, project_id):
     """
     Render page where clients can create/edit a project
     """
+    if (project_id != ''):
+        existing_project = Project.objects.get(id=int(project_id))
+        form_init = {'name' : existing_project.name
+                   , 'requirements' : existing_project.requirements
+                   , 'keywords' : existing_project.keywords
+                   , 'description' : existing_project.description}
+    else:
+        form_init = {}
+        
     if request.method == "POST":
         print("MADE IT 1");
         form = ProjectSubmissionForm(request.POST)
         if (project_id != ""):
-            existing_project = Project.objects.get(id=int(project_id))
             existing_project.name = form.data["name"]
             existing_project.requirements = form.data["requirements"]
             existing_project.keywords = form.data["keywords"]
@@ -488,7 +496,7 @@ def submit_project(request, project_id):
             new_project.save()
         return HttpResponseRedirect("/client/")
         
-    form = ProjectSubmissionForm()
+    form = ProjectSubmissionForm(initial=form_init)
     context = {
             "form": form,
             "project_id": project_id
