@@ -17,10 +17,11 @@ Potential clients can submit projects, students can bid on them, and instructors
   what the student would be signing up to do if they bid on the project.
 * Students can send messages to other users, in particular their instructors.
 * Students will receive notifications if their bids are accepted or rejected by their instructors.
+* Students can use tags to sort projects according to their interests.
 
 #### Instructor Features
 * Instructors can send and receive messages to other users
-* Instructors can see bids that have been submitted (bids include team member names and a description of why they should be awarded the project) and opt to accept or reject them.
+* Instructors can see bids that have been submitted (bids include team member names and a description of why they should be awarded the project) and opt to accept or reject them for all classes.
 * Instructors can view projects submitted by clients and either accept them or reject them.
 
 #### Client Features
@@ -28,7 +29,11 @@ Potential clients can submit projects, students can bid on them, and instructors
 * Clients can check the status of projects they have submitted (whether they have been approved, and if so, if there are any bids on them).
 * Clients can respond to questions submitted on their projects by students.
 * Clients will receive notifications if their projects are rejected.
+* Clients can edit project descriptions after they have been submitted.
 
+#### Admin Features
+* Admins can edit class sections and members
+* Admins can create keys that instructors use to register.
 
 
 ### Bug Fixes
